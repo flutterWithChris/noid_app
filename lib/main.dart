@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:noid_app/order_status.dart';
+import 'package:noid_app/profile_card.dart';
 import 'category_select.dart';
-import 'heroslider.dart';
+import 'hero_slider.dart';
+import 'profile_card.dart';
+import 'bottom_navigation.dart';
 
 void main() {
   runApp(const NoidApp());
@@ -17,23 +21,18 @@ class NoidApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: const Text('Welcome to Noid Botanicals!', style: TextStyle(color: Colors.black87)),
+          title: const Text('Welcome to Noid Botanicals!',
+              style: TextStyle(color: Colors.black87)),
         ),
-
-        body: Column(
-          children: <Widget> [
-
-            Container(height: 75.0, child: CategorySelect(),),
-
-           HeroSlider(), // Announcements
+        body: ListView(
+          children: <Widget>[
+            ProfileCard(),
+            OrderStatus(),
+            HeroSlider(), // Announcements
           ],
-
+        ),
+        bottomNavigationBar: BottomNavigation(),
       ),
-
-      ),
-
     );
-
   }
-
 }
