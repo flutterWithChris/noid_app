@@ -10,11 +10,13 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
 
+  final screens = [];
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
