@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {
-  UserProfile({Key? key}) : super(key: key);
+  const UserProfile({Key? key}) : super(key: key);
 
   // String firstName, lastName, phoneNumber, email, address = 'test';
   // Double customerID, cbdLevel;

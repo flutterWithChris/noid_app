@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CategorySelect extends StatelessWidget {
+  const CategorySelect({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -11,7 +13,7 @@ class CategorySelect extends StatelessWidget {
           width: 75.0,
           height: 75.0,
           color: Colors.red,
-          child: Text('CBD Oil', textAlign: TextAlign.center),
+          child: const Text('CBD Oil', textAlign: TextAlign.center),
         ),
         Container(
           width: 75.0,
@@ -38,9 +40,7 @@ class CategorySelect extends StatelessWidget {
           height: 75.0,
           color: Colors.deepOrange,
         ),
-
       ],
     );
-
   }
 }

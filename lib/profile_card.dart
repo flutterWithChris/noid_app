@@ -7,13 +7,13 @@ class ProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
+      child: SizedBox(
         height: 85,
         child: Card(
           elevation: 0,
           color: Colors.transparent,
           child: Column(
-            children: [
+            children: const [
               ListTile(
                 leading: Icon(Icons.person),
                 title: Text('Christian Vergara'),

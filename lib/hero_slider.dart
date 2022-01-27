@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class HeroSlider extends StatelessWidget {
+  const HeroSlider({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Card(
-      margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+      margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       clipBehavior: Clip.antiAlias,
-      child: Container(
+      child: SizedBox(
         height: 350,
         child: Column(children: <Widget>[
           Image.network(
@@ -17,11 +19,11 @@ class HeroSlider extends StatelessWidget {
             title: const Text('Does CBD Have Calories?',
                 style: TextStyle(fontWeight: FontWeight.bold)),
           ),
-          Text('Counting the calories in each different CBD product.'),
-          ButtonBar(
+          const Text('Counting the calories in each different CBD product.'),
+          const ButtonBar(
             alignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: null, child: const Text('Read More'))
+              ElevatedButton(onPressed: null, child: Text('Read More'))
             ],
           ),
         ]),
