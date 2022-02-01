@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/shop_page.dart';
+import 'package:noid_app/View/shop_page.dart';
 import 'category_select.dart';
 import 'cbd_education.dart';
 import 'hero_slider.dart';

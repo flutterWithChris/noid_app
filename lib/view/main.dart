@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:noid_app/home_page.dart';
-import 'package:noid_app/shop_page.dart';
+import 'package:noid_app/View/home_page.dart';
+import 'package:noid_app/View/shop_page.dart';
 
 import 'cbd_education.dart';
 
