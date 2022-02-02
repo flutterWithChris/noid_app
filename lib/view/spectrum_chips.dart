@@ -7,8 +7,8 @@ class SpectrumChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
+      const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Text(
           'THC Preference',
           textAlign: TextAlign.left,

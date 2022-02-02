@@ -5,8 +5,6 @@ class CBDEducation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('CBD Education'),
-    );
+    return const Text('CBD Education');
   }
 }

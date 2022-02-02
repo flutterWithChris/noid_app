@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class SearchBar extends StatefulWidget {
-  SearchBar({Key? key}) : super(key: key);
+  const SearchBar({Key? key}) : super(key: key);
 
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -12,6 +12,7 @@ class _SearchBarState extends State<SearchBar> {
   // TODO: Search History
   static const historyLength = 5;
 
+  // ignore: prefer_final_fields
   List<String> _searchHistory = [
     'cbd oil',
     'cbd vape',
@@ -81,18 +82,18 @@ class _SearchBarState extends State<SearchBar> {
       hint: 'Search..',
       openAxisAlignment: 0.0,
       width: 600,
-      scrollPadding: EdgeInsets.only(top: 16, bottom: 20),
+      scrollPadding: const EdgeInsets.only(top: 16, bottom: 20),
       elevation: 5.0,
       onQueryChanged: (query) {},
       transition: CircularFloatingSearchBarTransition(),
       transitionCurve: Curves.easeInOut,
-      transitionDuration: Duration(milliseconds: 500),
+      transitionDuration: const Duration(milliseconds: 500),
       builder: (context, transition) {
         return ClipRRect(
             child: Material(
           color: Colors.white,
           child: Column(
-            children: [
+            children: const [
               ListTile(
                 title: Text('Home'),
               )

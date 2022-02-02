@@ -10,19 +10,23 @@ class ChipFilters extends StatefulWidget {
 }
 
 class _ChipFiltersState extends State<ChipFilters> {
+  bool _isSelected = false;
+
   @override
   Widget build(BuildContext context) {
-    bool _isSelected = false;
-
     return FilterChip(
       label: Text(widget.chipName),
+      labelStyle: TextStyle(color: Colors.white),
+      checkmarkColor: Colors.white,
+      showCheckmark: true,
+      selectedColor: Colors.lightGreen,
+      backgroundColor: Colors.lightBlue,
       selected: _isSelected,
       onSelected: (isSelected) {
         setState(() {
           _isSelected = isSelected;
         });
       },
-      selectedColor: Color(0xFFFF9000),
     );
   }
 }
