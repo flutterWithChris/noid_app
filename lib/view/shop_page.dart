@@ -20,7 +20,7 @@ class _ShopPageState extends State<ShopPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MainAppBar(),
-        bottomNavigationBar: BottomNavBar(index: 1),
+        bottomNavigationBar: BottomNavBar(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(

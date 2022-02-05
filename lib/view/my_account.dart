@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noid_app/routes/route.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/menu_item.dart';
@@ -10,7 +11,7 @@ class MyAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MainAppBar(),
-      bottomNavigationBar: BottomNavBar(index: 2),
+      bottomNavigationBar: BottomNavBar(),
       body: ListView(
         children: [
           SizedBox(
@@ -37,20 +38,30 @@ class MyAccount extends StatelessWidget {
                 MenuItem(
                   itemName: 'My Orders',
                   leadingIcon: Icon(Icons.checklist),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(RouteManager.myOrders),
                 ),
                 Divider(),
                 MenuItem(
-                    itemName: 'Manage Subscriptions',
-                    leadingIcon: Icon(Icons.subscriptions_outlined)),
+                  itemName: 'Manage Subscriptions',
+                  leadingIcon: Icon(Icons.subscriptions_outlined),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(RouteManager.mySubscriptions),
+                ),
                 Divider(),
                 MenuItem(
                   itemName: 'Billing Info',
                   leadingIcon: Icon(Icons.toll),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(RouteManager.billingInfo),
                 ),
                 Divider(),
                 MenuItem(
-                    itemName: 'Shipping Addresses',
-                    leadingIcon: Icon(Icons.home_outlined)),
+                  itemName: 'Shipping Addresses',
+                  leadingIcon: Icon(Icons.home_outlined),
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(RouteManager.shippingAddresses),
+                ),
               ],
             ),
           ),

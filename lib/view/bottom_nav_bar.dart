@@ -5,7 +5,7 @@ import 'package:noid_app/View/shop_page.dart';
 import 'package:noid_app/routes/route.dart';
 
 class BottomNavBar extends StatefulWidget {
-  BottomNavBar({Key? key, required index}) : super(key: key);
+  BottomNavBar({Key? key}) : super(key: key);
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
