@@ -20,8 +20,6 @@ class NoidApp extends StatefulWidget {
 class _NoidAppState extends State<NoidApp> {
   @override
   Widget build(BuildContext context) {
-    
-
     return const MaterialApp(
       initialRoute: RouteManager.homePage,
       onGenerateRoute: RouteManager.generateRoute,

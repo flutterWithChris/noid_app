@@ -81,8 +81,9 @@ class _SearchBarState extends State<SearchBar> {
     return FloatingSearchBar(
       hint: 'Search..',
       openAxisAlignment: 0.0,
-      width: 600,
-      scrollPadding: const EdgeInsets.only(top: 16, bottom: 20),
+      width: 500,
+      height: 48,
+      scrollPadding: const EdgeInsets.only(top: 16, bottom: 5),
       elevation: 5.0,
       onQueryChanged: (query) {},
       transition: CircularFloatingSearchBarTransition(),
@@ -92,13 +93,6 @@ class _SearchBarState extends State<SearchBar> {
         return ClipRRect(
             child: Material(
           color: Colors.white,
-          child: Column(
-            children: const [
-              ListTile(
-                title: Text('Home'),
-              )
-            ],
-          ),
         ));
       },
     );
