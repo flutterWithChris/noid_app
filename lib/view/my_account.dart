@@ -3,6 +3,7 @@ import 'package:noid_app/routes/route.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/menu_item.dart';
+import 'package:noid_app/view/my_orders.dart';
 
 class MyAccount extends StatelessWidget {
   const MyAccount({Key? key}) : super(key: key);
@@ -38,8 +39,11 @@ class MyAccount extends StatelessWidget {
                 MenuItem(
                   itemName: 'My Orders',
                   leadingIcon: Icon(Icons.checklist),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed(RouteManager.myOrders),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyOrders(),
+                      )),
                 ),
                 Divider(),
                 MenuItem(

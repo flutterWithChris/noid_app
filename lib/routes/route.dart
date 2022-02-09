@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/view/billing_info.dart';
-import 'package:noid_app/view/current_order.dart';
 import 'package:noid_app/view/home_page.dart';
+import 'package:noid_app/view/login_page.dart';
 import 'package:noid_app/view/my_account.dart';
-import 'package:noid_app/view/my_orders.dart';
 import 'package:noid_app/view/my_subscriptions.dart';
-import 'package:noid_app/view/order_card.dart';
-import 'package:noid_app/view/order_details.dart';
 import 'package:noid_app/view/shipping_addresses.dart';
 import 'package:noid_app/view/shop_page.dart';
 
 class RouteManager {
-  static const String homePage = '/';
+  static const String loginPage = '/';
+  static const String homePage = '/homePage';
   static const String shopPage = '/shopPage';
   static const String myAccount = '/myAccount';
   static const String myOrders = '/myOrders';
@@ -22,6 +20,10 @@ class RouteManager {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case loginPage:
+        return MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        );
       case homePage:
         return MaterialPageRoute(
           builder: (context) => HomePage(),
@@ -36,9 +38,6 @@ class RouteManager {
         return MaterialPageRoute(
           builder: (context) => MyAccount(),
         );
-
-      case myOrders:
-        return MaterialPageRoute(builder: (context) => MyOrders());
 
       case mySubscriptions:
         return MaterialPageRoute(builder: (context) => MySubscriptions());

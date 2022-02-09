@@ -38,6 +38,7 @@ dependencies:
   material_floating_search_bar: ^0.3.6
   get: ^4.6.1
   woocommerce: ^0.9.7
+  flutter_html: ^2.2.1
 
 
 dev_dependencies:

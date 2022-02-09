@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: [
           const ProfileCard(),
-          OrderCard(thisOrder: orders[0]),
           HeroSlider(),
         ],
       ),

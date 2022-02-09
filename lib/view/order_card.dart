@@ -5,13 +5,14 @@ import 'package:noid_app/routes/route.dart';
 import 'package:noid_app/view/current_order.dart';
 import 'package:noid_app/view/order_details.dart';
 import 'package:noid_app/view/order_info.dart';
+import 'package:woocommerce/woocommerce.dart';
 
 class OrderCard extends StatefulWidget {
-  Order thisOrder;
+  final WooOrder order;
 
   OrderCard({
     Key? key,
-    required this.thisOrder,
+    required this.order,
   }) : super(key: key);
 
   @override
@@ -23,27 +24,30 @@ class _OrderCardState extends State<OrderCard> {
   Widget build(BuildContext context) {
     //print(OrderInfo.of(context)!.currentOrder.orderStatus);
     // Order Card
-    return ListTile(
-        leading: Icon(Icons.check_circle),
-        minLeadingWidth: 35,
-        title: Text('Order #' + widget.thisOrder.orderNumber.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(
-            widget.thisOrder.orderDate +
-                '\n' +
-                '\$' +
-                widget.thisOrder.orderTotal.toString(),
-            style: TextStyle(height: 1.618)),
-        tileColor: Colors.white,
-        trailing: Icon(Icons.arrow_forward_rounded),
-        contentPadding: EdgeInsets.all(25),
-        onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderDetails(order: widget.thisOrder),
-                ),
-              )
-            });
+    return Card(
+      elevation: 1.5,
+      child: ListTile(
+          leading: Icon(Icons.check_circle),
+          minLeadingWidth: 35,
+          title: Text('Order #' + widget.order.number,
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(
+              widget.order.dateCompleted +
+                  '\n' +
+                  '\$' +
+                  widget.order.total,
+              style: TextStyle(height: 1.618)),
+          tileColor: Colors.white,
+          trailing: Icon(Icons.arrow_forward_rounded),
+          contentPadding: EdgeInsets.all(25),
+          onTap: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderDetails(order: widget.order),
+                  ),
+                )
+              }),
+    );
   }
 }

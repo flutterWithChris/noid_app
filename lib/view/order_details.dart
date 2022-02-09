@@ -3,9 +3,10 @@ import 'package:noid_app/Model/order.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/order_info.dart';
+import 'package:woocommerce/woocommerce.dart';
 
 class OrderDetails extends StatefulWidget {
-  final Order order;
+  final WooOrder order;
 
   OrderDetails({Key? key, required this.order}) : super(key: key);
 
@@ -16,7 +17,7 @@ class OrderDetails extends StatefulWidget {
 class _OrderDetailsState extends State<OrderDetails> {
   @override
   Widget build(BuildContext context) {
-    Order currentOrder = widget.order;
+    WooOrder _order = widget.order;
     List<Step> stepList() => [
           Step(title: Text('Order Received'), content: Text('Test')),
           Step(title: Text('Order Shipped'), content: Text('Test')),
@@ -41,7 +42,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                     child: ListTile(
                       title: Text(
-                        'Order #' + currentOrder.orderNumber.toString(),
+                        'Order #' + _order.number,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
@@ -58,7 +59,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              currentOrder.orderStatus +
+                              _order.status +
                                   ' - Departed FL Facility' +
                                   '\nTracking: 1ZXE44T64562',
                               textAlign: TextAlign.left,
@@ -68,7 +69,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                         ],
                       ),
                       trailing: Text(
-                        currentOrder.orderDate,
+                        _order.dateCompleted,
                       ),
                     ),
                   ),
@@ -152,7 +153,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       fontWeight: FontWeight.bold, height: 2.0),
                                 ),
                                 Text('Ronald Zukas'),
-                                Text(currentOrder.shippingAddress),
+                                Text(_order.billing.address1),
                               ],
                             ),
                           ),
@@ -174,7 +175,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       fontWeight: FontWeight.bold, height: 2.0),
                                 ),
                                 Text('Ronald Zukas'),
-                                Text(currentOrder.shippingAddress),
+                                Text(_order.shipping.address1),
                               ],
                             ),
                           ),
