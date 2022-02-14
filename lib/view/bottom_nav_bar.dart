@@ -3,6 +3,7 @@ import 'package:noid_app/View/home_page.dart';
 import 'package:noid_app/View/my_account.dart';
 import 'package:noid_app/View/shop_page.dart';
 import 'package:noid_app/routes/route.dart';
+import 'package:noid_app/view/login_page.dart';
 
 class BottomNavBar extends StatefulWidget {
   BottomNavBar({Key? key}) : super(key: key);
@@ -14,11 +15,6 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   static int _currentIndex = 0;
 
-  final screens = [
-    const HomePage(),
-    const ShopPage(),
-    const MyAccount(),
-  ];
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(

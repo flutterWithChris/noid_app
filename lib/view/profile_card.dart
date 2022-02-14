@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:noid_app/Controller/woo_controller.dart';
+import 'package:noid_app/Model/current_user.dart';
+import 'package:noid_app/view/home_page.dart';
+import 'package:noid_app/view/login_page.dart';
+import 'package:woocommerce/models/customer.dart';
+import 'login_page.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key}) : super(key: key);
+  WooCustomer currentUser;
+
+  ProfileCard({Key? key, required this.currentUser}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +21,11 @@ class ProfileCard extends StatelessWidget {
           elevation: 0,
           color: Colors.transparent,
           child: Column(
-            children: const [
+            children: [
               ListTile(
                 leading: Icon(Icons.person),
-                title: Text('Christian Vergara'),
-                subtitle: Text('CBD Connoseiur '),
+                title: Text(currentUser.firstName + " " + currentUser.lastName),
+                subtitle: Text(currentUser.email),
               ),
               Flexible(
                 child: FractionallySizedBox(

@@ -20,13 +20,15 @@ class RouteManager {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case loginPage:
-        return MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        );
       case homePage:
         return MaterialPageRoute(
           builder: (context) => HomePage(),
+          settings: settings,
+        );
+
+      case loginPage:
+        return MaterialPageRoute(
+          builder: (context) => LoginPage(),
         );
 
       case shopPage:

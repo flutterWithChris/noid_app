@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/routes/route.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
+import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/menu_item.dart';
 import 'package:noid_app/view/my_orders.dart';
@@ -23,7 +24,7 @@ class MyAccount extends StatelessWidget {
           SizedBox(
             //Name Plate
             child: Text(
-              'Sandra Leno',
+              'test',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),

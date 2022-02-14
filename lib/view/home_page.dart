@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noid_app/Model/current_user.dart';
 import 'package:noid_app/Model/order.dart';
 import 'package:noid_app/View/shop_page.dart';
 import 'package:noid_app/routes/route.dart';
@@ -7,12 +8,13 @@ import 'package:noid_app/view/main.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/order_card.dart';
 import 'package:noid_app/view/order_info.dart';
+import 'package:noid_app/view/profile_card.dart';
+import 'package:woocommerce/models/customer.dart';
 import 'hero_slider.dart';
 import 'my_account.dart';
-import 'profile_card.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,6 +23,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final Map<String, WooCustomer> arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, WooCustomer>;
+    WooCustomer? _currentUser = arguments["currentUser"];
+    print(_currentUser!.firstName + " " + _currentUser.lastName);
+
     final orders = List.generate(
         5,
         (index) => Order(
@@ -35,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       appBar: MainAppBar(),
       body: ListView(
         children: [
-          const ProfileCard(),
+          ProfileCard(currentUser: _currentUser),
           HeroSlider(),
         ],
       ),

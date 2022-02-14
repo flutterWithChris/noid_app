@@ -4,7 +4,6 @@ import 'package:noid_app/Controller/woo_controller.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:woocommerce/models/products.dart';
-import '';
 
 class ProductPage extends StatefulWidget {
   final WooProduct product;
