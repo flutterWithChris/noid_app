@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noid_app/Controller/woo_controller.dart';
 import 'package:noid_app/Model/current_user.dart';
 import 'package:noid_app/routes/route.dart';
@@ -6,6 +7,7 @@ import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:wp_json_api/models/responses/wp_user_login_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
+import 'globals.dart' as globals;
 
 import 'dart:convert' show json, base64, ascii;
 
@@ -108,11 +110,13 @@ class _LoginPageState extends State<LoginPage> {
 
                           //Set Current User
                           currentUser = _currentUser;
+                          setState(() {
+                            globals.currentUser = _currentUser;
+                          });
 
                           //Push to homepage
-                          await Navigator.pushNamed(
-                              context, RouteManager.homePage,
-                              arguments: {'currentUser' : _currentUser});
+                          await Get.to(() => HomePage(),
+                              arguments: {'currentUser': _currentUser});
                         }
                       } on Exception catch (e) {
                         AlertDialog(

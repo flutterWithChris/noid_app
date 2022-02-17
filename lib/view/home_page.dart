@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noid_app/Model/current_user.dart';
 import 'package:noid_app/Model/order.dart';
 import 'package:noid_app/View/shop_page.dart';
@@ -12,6 +13,7 @@ import 'package:noid_app/view/profile_card.dart';
 import 'package:woocommerce/models/customer.dart';
 import 'hero_slider.dart';
 import 'my_account.dart';
+import 'globals.dart' as globals;
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -21,12 +23,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static late Map<String, WooCustomer> arguments;
+  static WooCustomer? _currentUser;
+
   @override
   Widget build(BuildContext context) {
-    final Map<String, WooCustomer> arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, WooCustomer>;
-    WooCustomer? _currentUser = arguments["currentUser"];
-    print(_currentUser!.firstName + " " + _currentUser.lastName);
+    if (Get.previousRoute == '/') {
+      print('Log In Route');
+      arguments = ModalRoute.of(context)!.settings.arguments
+          as Map<String, WooCustomer>;
+      _currentUser = arguments["currentUser"];
+    } else {
+      print('Other Route');
+    }
+
+    print(_currentUser!.firstName + " " + _currentUser!.lastName);
+    print(globals.currentUser.firstName + " set as user");
 
     final orders = List.generate(
         5,

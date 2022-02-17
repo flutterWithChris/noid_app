@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noid_app/view/billing_info.dart';
 import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/login_page.dart';
@@ -21,8 +22,8 @@ class RouteManager {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homePage:
-        return MaterialPageRoute(
-          builder: (context) => HomePage(),
+        return Get.to(
+          page: () => HomePage(),
           settings: settings,
         );
 
@@ -54,4 +55,4 @@ class RouteManager {
         throw FormatException('Route not found! Check routes again!');
     }
   }
-}
+}*/

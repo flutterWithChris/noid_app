@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/View/home_page.dart';
-import 'package:noid_app/View/my_account.dart';
-import 'package:noid_app/View/shop_page.dart';
-import 'package:noid_app/routes/route.dart';
-import 'package:noid_app/view/login_page.dart';
+import 'package:get/get.dart';
+import 'package:noid_app/view/home_page.dart';
+import 'package:noid_app/view/my_account.dart';
+import 'package:noid_app/view/shop_page.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class BottomNavBar extends StatefulWidget {
   BottomNavBar({Key? key}) : super(key: key);
@@ -17,50 +17,44 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
+    return SalomonBottomBar(
       currentIndex: _currentIndex,
-      items: const [
-        BottomNavigationBarItem(
+      onTap: (i) => setState(() {
+        _currentIndex = i;
+        print(_currentIndex);
+        switch (_currentIndex) {
+          case 0:
+            {
+              Get.to(() => HomePage());
+            }
+            break;
+
+          case 1:
+            {
+              Get.to(() => ShopPage());
+            }
+            break;
+
+          case 2:
+            {
+              Get.to(() => MyAccount());
+            }
+        }
+      }),
+      items: [
+        SalomonBottomBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          title: Text('Home'),
         ),
-        BottomNavigationBarItem(
+        SalomonBottomBarItem(
           icon: Icon(Icons.shopping_basket),
-          label: 'Shop Now',
+          title: Text('Shop Now'),
         ),
-        BottomNavigationBarItem(
+        SalomonBottomBarItem(
           icon: Icon(Icons.account_circle_rounded),
-          label: 'My Account',
+          title: Text('My Account'),
         ),
       ],
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-
-          switch (index) {
-            case 0:
-              {
-                Navigator.of(context).pushNamed(RouteManager.homePage);
-              }
-              break;
-            case 1:
-              {
-                Navigator.of(context).pushNamed(RouteManager.shopPage);
-              }
-              break;
-
-            case 2:
-              {
-                Navigator.of(context).pushNamed(RouteManager.myAccount);
-              }
-              break;
-            default:
-              {
-                throw FormatException('No Route Found!');
-              }
-          }
-        });
-      },
     );
   }
 }

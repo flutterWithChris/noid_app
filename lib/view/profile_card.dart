@@ -7,7 +7,7 @@ import 'package:woocommerce/models/customer.dart';
 import 'login_page.dart';
 
 class ProfileCard extends StatelessWidget {
-  WooCustomer currentUser;
+  WooCustomer? currentUser;
 
   ProfileCard({Key? key, required this.currentUser}) : super(key: key);
 
@@ -24,8 +24,9 @@ class ProfileCard extends StatelessWidget {
             children: [
               ListTile(
                 leading: Icon(Icons.person),
-                title: Text(currentUser.firstName + " " + currentUser.lastName),
-                subtitle: Text(currentUser.email),
+                title:
+                    Text(currentUser!.firstName + " " + currentUser!.lastName),
+                subtitle: Text(currentUser!.email),
               ),
               Flexible(
                 child: FractionallySizedBox(
