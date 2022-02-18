@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/Model/order.dart';
-import 'package:noid_app/View/main.dart';
-import 'package:noid_app/routes/route.dart';
-import 'package:noid_app/view/current_order.dart';
 import 'package:noid_app/view/order_details.dart';
-import 'package:noid_app/view/order_info.dart';
-import 'package:woocommerce/woocommerce.dart';
+import 'package:woocommerce/models/order.dart';
 
 class OrderCard extends StatefulWidget {
   final WooOrder order;
@@ -32,10 +27,7 @@ class _OrderCardState extends State<OrderCard> {
           title: Text('Order #' + widget.order.number,
               style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text(
-              widget.order.dateCompleted +
-                  '\n' +
-                  '\$' +
-                  widget.order.total,
+              widget.order.dateCompleted + '\n' + '\$' + widget.order.total,
               style: TextStyle(height: 1.618)),
           tileColor: Colors.white,
           trailing: Icon(Icons.arrow_forward_rounded),

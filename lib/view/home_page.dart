@@ -5,7 +5,7 @@ import 'package:noid_app/Model/order.dart';
 import 'package:noid_app/View/shop_page.dart';
 import 'package:noid_app/routes/route.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
-import 'package:noid_app/view/main.dart';
+import 'package:noid_app/main.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/order_card.dart';
 import 'package:noid_app/view/order_info.dart';
