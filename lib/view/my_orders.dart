@@ -6,6 +6,7 @@ import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/order_card.dart';
 import 'package:noid_app/view/order_cards.dart';
 import 'package:woocommerce/woocommerce.dart';
+import 'globals.dart' as globals;
 
 class MyOrders extends StatefulWidget {
   MyOrders({Key? key}) : super(key: key);
@@ -16,11 +17,13 @@ class MyOrders extends StatefulWidget {
 
 class _MyOrdersState extends State<MyOrders> {
   WooCommerce _wooController = wooController;
+  WooCustomer user = globals.currentUser;
 
   List<WooOrder> allOrders = [];
 
   getOrders() async {
-    allOrders = await _wooController.getOrders();
+    print(user.id);
+    allOrders = await _wooController.getOrders(customer: user.id);
   }
 
   @override

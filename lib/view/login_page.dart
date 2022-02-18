@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:noid_app/Controller/woo_controller.dart';
 import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/main_app_bar.dart';
+import 'package:wp_json_api/models/responses/wp_user_register_response.dart';
+import 'package:wp_json_api/wp_json_api.dart';
 import 'globals.dart' as globals;
 
 import 'dart:convert' show json, base64, ascii;
@@ -20,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   WooCommerce _wooCommerce = wooController;
   String _email = '';
   String _password = '';
+  late WPUserRegisterResponse wpUserRegisterResponse;
   @override
   Widget build(BuildContext context) {
     WooCustomer currentUser;
@@ -67,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 15,
                   ),
                   TextField(
+                    obscureText: true,
                     onChanged: (String value) {
                       _password = value;
                     },
@@ -123,12 +127,19 @@ class _LoginPageState extends State<LoginPage> {
                   width: 15,
                 ),
                 OutlinedButton(
-                    onPressed: () => print('sign up'), child: Text('Sign Up')),
+                    onPressed: () async {
+                      WooCustomer newUser = WooCustomer(
+                          username: _email, password: _password, email: _email);
+                      final result = wooController.createCustomer(newUser);
+                    },
+                    child: Text('Sign Up')),
               ],
             ),
             //TODO: Forgot Button
             TextButton(
-                onPressed: () => print('forgot pressed'),
+                onPressed: () {
+                  print("Forgot Pressed");
+                },
                 child: Text('Forgot Username/Password'))
           ],
         ),

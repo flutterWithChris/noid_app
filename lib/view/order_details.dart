@@ -59,9 +59,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              _order.status +
-                                  ' - Departed FL Facility' +
-                                  '\nTracking: 1ZXE44T64562',
+                              _order.status.toUpperCase(),
                               textAlign: TextAlign.left,
                               style: TextStyle(height: 1.5),
                             ),

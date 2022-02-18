@@ -6,9 +6,11 @@ import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/login_page.dart';
 import 'package:noid_app/view/my_account.dart';
 import 'package:noid_app/view/shop_page.dart';
+import 'package:wp_json_api/wp_json_api.dart';
 
 void main() {
   runApp(NoidApp());
+  WPJsonAPI.instance.initWith(baseUrl: "https://noidbotanicals.com");
 }
 
 class NoidApp extends StatefulWidget {
