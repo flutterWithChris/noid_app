@@ -107,9 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                               wooController.fetchLoggedInUserId().toString());
 
                           //Set Current User
-                          setState(() {
-                            globals.currentUser = _currentUser;
-                          });
+
+                          globals.currentUser = _currentUser;
 
                           //Push to homepage
                           await Get.to(() => HomePage(),

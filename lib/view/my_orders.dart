@@ -18,8 +18,18 @@ class MyOrders extends StatefulWidget {
 class _MyOrdersState extends State<MyOrders> {
   WooCommerce _wooController = wooController;
   WooCustomer user = globals.currentUser;
-
   List<WooOrder> allOrders = [];
+  int count = 1;
+
+  Future<List<WooOrder>> _getMyOrders() async {
+    var orders = await _wooController.getOrders(customer: user.id);
+    List<WooOrder> myOrders = [];
+    for (var o in orders) {
+      WooOrder order = o;
+      myOrders.add(o);
+    }
+    return myOrders;
+  }
 
   getOrders() async {
     print(user.id);
@@ -28,16 +38,55 @@ class _MyOrdersState extends State<MyOrders> {
 
   @override
   Widget build(BuildContext context) {
-    getOrders();
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: BottomNavBar(),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          final order = allOrders[index];
-          return OrderCard(order: order);
-        },
+      body: Column(
+        children: [
+          SizedBox(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                "My Orders",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          FutureBuilder(
+            future: _getMyOrders(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.data == null) {
+                return isLoading();
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    //WooOrder order = allOrders[index];
+
+                    final order = snapshot.data[index];
+                    return OrderCard(order: order);
+                  },
+                );
+
+                /*   return Container(
+                      child: Text("Nope"),
+                    );*/
+
+              }
+            },
+          ),
+        ],
       ),
     );
+  }
+}
+
+class isLoading extends StatelessWidget {
+  const isLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: CircularProgressIndicator());
   }
 }

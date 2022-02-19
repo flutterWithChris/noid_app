@@ -29,15 +29,14 @@ class _OrderDetailsState extends State<OrderDetails> {
       bottomNavigationBar: BottomNavBar(),
       body: Column(
         children: [
-          SizedBox(
-            child: Image.network(
-                'https://media.wired.com/photos/5a6a61938c669c70314b300d/master/pass/Google-Map-US_10.jpg'),
-          ),
           Expanded(
             child: ListView(shrinkWrap: true,
-
                 // Order Top Details
                 children: [
+                  SizedBox(
+                    child: Image.network(
+                        'https://media.wired.com/photos/5a6a61938c669c70314b300d/master/pass/Google-Map-US_10.jpg'),
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                     child: ListTile(
@@ -150,7 +149,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold, height: 2.0),
                                 ),
-                                Text('Ronald Zukas'),
+                                Text(_order.billing.firstName +
+                                    " " +
+                                    _order.billing.lastName),
                                 Text(_order.billing.address1),
                               ],
                             ),
@@ -172,8 +173,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold, height: 2.0),
                                 ),
-                                Text('Ronald Zukas'),
-                                Text(_order.shipping.address1),
+                                Text(_order.shipping.firstName +
+                                    " " +
+                                    _order.shipping.lastName),
+                                Text(_order.shipping.address1 +
+                                    " " +
+                                    _order.shipping.city),
                               ],
                             ),
                           ),

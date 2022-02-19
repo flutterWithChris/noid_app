@@ -26,8 +26,7 @@ class _OrderCardState extends State<OrderCard> {
           minLeadingWidth: 35,
           title: Text('Order #' + widget.order.number,
               style: TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text(
-              widget.order.dateCompleted + '\n' + '\$' + widget.order.total,
+          subtitle: Text(widget.order.status + '\n' + '\$' + widget.order.total,
               style: TextStyle(height: 1.618)),
           tileColor: Colors.white,
           trailing: Icon(Icons.arrow_forward_rounded),

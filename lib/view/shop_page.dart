@@ -19,25 +19,20 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  bool isLoading = false;
-  WooCommerce _wooController = wooController;
+  final WooCommerce _wooController = wooController;
 
-  List<WooProduct> allProducts = [];
-
-  getProducts() async {
-    setState(() {
-      isLoading = true;
-    });
-    allProducts = await _wooController.getProducts();
-    setState(() {
-      isLoading = false;
-    });
+  Future<List<WooProduct>> _getAllProducts() async {
+    var products = await _wooController.getProducts();
+    List<WooProduct> allProducts = [];
+    for (var p in products) {
+      WooProduct product = p;
+      allProducts.add(p);
+    }
+    return allProducts;
   }
 
   @override
   Widget build(BuildContext context) {
-    getProducts();
-
     return Scaffold(
         appBar: MainAppBar(),
         bottomNavigationBar: BottomNavBar(),
@@ -49,19 +44,42 @@ class _ShopPageState extends State<ShopPage> {
                 child: SearchBar(),
               ),
             ),
-            isLoading
-                ? Expanded(
+            FutureBuilder(
+              future: _getAllProducts(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return isLoading();
+                } else {
+                  print("Products: " + snapshot.data.length.toString());
+                  return Expanded(
                     child: GridView.builder(
+                      itemCount: snapshot.data.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2, childAspectRatio: 0.70),
                       itemBuilder: (context, index) {
-                        final product = allProducts[index];
+                        final product = snapshot.data[index];
                         return ProductCard(currentProduct: product);
                       },
                     ),
-                  )
-                : Center(child: CircularProgressIndicator()),
+                  );
+
+                  /*   return Container(
+                      child: Text("Nope"),
+                    );*/
+
+                }
+              },
+            ),
           ],
         ));
+  }
+}
+
+class isLoading extends StatelessWidget {
+  const isLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: CircularProgressIndicator());
   }
 }
