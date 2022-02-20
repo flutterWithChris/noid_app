@@ -17,12 +17,12 @@ class MyOrders extends StatefulWidget {
 
 class _MyOrdersState extends State<MyOrders> {
   WooCommerce _wooController = wooController;
-  WooCustomer user = globals.currentUser;
+  WooCustomer? user = globals.currentUser;
   List<WooOrder> allOrders = [];
   int count = 1;
 
   Future<List<WooOrder>> _getMyOrders() async {
-    var orders = await _wooController.getOrders(customer: user.id);
+    var orders = await _wooController.getOrders(customer: user!.id);
     List<WooOrder> myOrders = [];
     for (var o in orders) {
       WooOrder order = o;
@@ -32,8 +32,8 @@ class _MyOrdersState extends State<MyOrders> {
   }
 
   getOrders() async {
-    print(user.id);
-    allOrders = await _wooController.getOrders(customer: user.id);
+    print(user?.id);
+    allOrders = await _wooController.getOrders(customer: user!.id);
   }
 
   @override

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:noid_app/Controller/woo_controller.dart';
 import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/main_app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wp_json_api/models/responses/wp_user_register_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 import 'globals.dart' as globals;
@@ -107,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                               wooController.fetchLoggedInUserId().toString());
 
                           //Set Current User
-
+                          setUserPreferences(_currentUser);
                           globals.currentUser = _currentUser;
 
                           //Push to homepage
@@ -182,4 +184,29 @@ void showLoginAlert(BuildContext context) {
       ),
     ),
   );
+}
+
+setUserPreferences(WooCustomer thisUser) async {
+  final prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = await wooController.isCustomerLoggedIn();
+
+  await prefs.setInt('userId', thisUser.id);
+  await prefs.setString('firstName', thisUser.firstName);
+  await prefs.setString('lastName', thisUser.lastName);
+  await prefs.setString('email', thisUser.email);
+  await prefs.setBool('isLoggedIn', isLoggedIn);
+  await prefs.setString('shippingAddress1', thisUser.shipping.address1);
+  await prefs.setString('shippingAddress2', thisUser.shipping.address2);
+  await prefs.setString('shippingCity', thisUser.shipping.city);
+  await prefs.setString('shippingState', thisUser.shipping.state);
+  await prefs.setString('shippingZipcode', thisUser.shipping.postcode);
+  await prefs.setString('shippingCountry', thisUser.shipping.country);
+  await prefs.setString('shippingCompany', thisUser.shipping.company);
+  await prefs.setString('billingAddress1', thisUser.billing.address1);
+  await prefs.setString('billingAddress2', thisUser.billing.address2);
+  await prefs.setString('billingCity', thisUser.billing.city);
+  await prefs.setString('billingState', thisUser.billing.state);
+  await prefs.setString('billingZipcode', thisUser.billing.postcode);
+  await prefs.setString('billingCountry', thisUser.billing.country);
+  await prefs.setString('billingCompany', thisUser.billing.company);
 }

@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     print(_currentUser!.firstName + " " + _currentUser!.lastName);
-    print(globals.currentUser.firstName + " set as user");
+    print(globals.currentUser!.firstName + " set as user");
 
     final orders = List.generate(
         5,

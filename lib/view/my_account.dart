@@ -11,11 +11,11 @@ import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/menu_item.dart';
 import 'package:noid_app/view/my_orders.dart';
 import 'package:woocommerce/models/customer.dart';
-import 'globals.dart' as globals;
+import 'package:noid_app/view/globals.dart' as globals;
 
 class MyAccount extends StatelessWidget {
   MyAccount({Key? key}) : super(key: key);
-  WooCustomer _currentUser = globals.currentUser;
+  WooCustomer? _currentUser = globals.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class MyAccount extends StatelessWidget {
           SizedBox(
             //Name Plate
             child: Text(
-              _currentUser.firstName + " " + _currentUser.lastName,
+              _currentUser!.firstName + " " + _currentUser!.lastName,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
@@ -63,7 +63,7 @@ class MyAccount extends StatelessWidget {
                 MenuItem(
                     itemName: 'Billing Info',
                     leadingIcon: Icon(Icons.toll),
-                    onTap: () => Get.to(BillingInfo())),
+                    onTap: () => Get.to(() => BillingInfo())),
                 Divider(),
                 MenuItem(
                   itemName: 'Shipping Addresses',

@@ -10,7 +10,7 @@ class HeroSlider extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       clipBehavior: Clip.antiAlias,
       child: SizedBox(
-        height: 350,
+        height: 360,
         child: Column(children: <Widget>[
           Image.network(
               'https://noidbotanicals.com/wp-content/uploads/2021/10/20211005143841_IMG_3843-1-855x500.jpg'),
