@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noid_app/Model/current_user.dart';
 import 'package:noid_app/Model/order.dart';
 import 'package:noid_app/View/shop_page.dart';
 import 'package:noid_app/routes/route.dart';
@@ -13,7 +12,7 @@ import 'package:noid_app/view/profile_card.dart';
 import 'package:woocommerce/models/customer.dart';
 import 'hero_slider.dart';
 import 'my_account.dart';
-import 'globals.dart' as globals;
+import 'current_user.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -24,7 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static late Map<String, WooCustomer> arguments;
-  static WooCustomer? _currentUser;
+  static WooCustomer? _currentUser = CurrentUser.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +36,8 @@ class _HomePageState extends State<HomePage> {
       print('Other Route');
     }
 
-    print(_currentUser!.firstName + " " + _currentUser!.lastName);
-    print(globals.currentUser!.firstName + " set as user");
+    print(_currentUser!.firstName + " " + _currentUser!.lastName + "Set!!");
+    print(_currentUser!.firstName + " set as user");
 
     final orders = List.generate(
         5,

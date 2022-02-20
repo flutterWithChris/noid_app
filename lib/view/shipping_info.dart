@@ -3,17 +3,17 @@ import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/my_orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:woocommerce/models/customer.dart';
 import 'package:noid_app/view/current_user.dart';
+import 'package:woocommerce/models/customer.dart';
 
-class BillingInfo extends StatefulWidget {
-  const BillingInfo({Key? key}) : super(key: key);
+class ShippingInfo extends StatefulWidget {
+  const ShippingInfo({Key? key}) : super(key: key);
 
   @override
-  State<BillingInfo> createState() => _BillingInfoState();
+  State<ShippingInfo> createState() => _ShippingInfoState();
 }
 
-class _BillingInfoState extends State<BillingInfo> {
+class _ShippingInfoState extends State<ShippingInfo> {
   TextEditingController address1Controller = TextEditingController();
   TextEditingController address2Controller = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -21,17 +21,17 @@ class _BillingInfoState extends State<BillingInfo> {
   TextEditingController zipController = TextEditingController();
   TextEditingController companyController = TextEditingController();
 
-  getBillingInfo() async {
+  getShippingInfo() async {
     WooCustomer? _currentUser = CurrentUser.instance;
     //print(user!.firstName + "is the damn user");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() async {
-      address1Controller.text = _currentUser!.billing.address1;
-      address2Controller.text = _currentUser!.billing.address2;
-      cityController.text = _currentUser!.billing.city;
-      stateController.text = _currentUser!.billing.state;
-      zipController.text = _currentUser!.billing.postcode;
-      companyController.text = _currentUser!.billing.company;
+      address1Controller.text = _currentUser!.shipping.address1;
+      address2Controller.text = _currentUser!.shipping.address2;
+      cityController.text = _currentUser!.shipping.city;
+      stateController.text = _currentUser!.shipping.state;
+      zipController.text = _currentUser!.shipping.postcode;
+      companyController.text = _currentUser!.shipping.company;
     });
   }
 
@@ -49,7 +49,7 @@ class _BillingInfoState extends State<BillingInfo> {
 
   @override
   Widget build(BuildContext context) {
-    getBillingInfo();
+    getShippingInfo();
     @override
     void dispose() {
       address1Controller.dispose();
@@ -65,7 +65,7 @@ class _BillingInfoState extends State<BillingInfo> {
       appBar: MainAppBar(),
       bottomNavigationBar: BottomNavBar(),
       body: FutureBuilder(
-          future: getBillingInfo(),
+          future: getShippingInfo(),
           builder: (context, snapshot) {
             if (snapshot == null) {
               return isLoading();
@@ -79,7 +79,7 @@ class _BillingInfoState extends State<BillingInfo> {
                         Center(
                           heightFactor: 2.0,
                           child: Text(
-                            "Billing Info",
+                            "Shipping Info",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 24),

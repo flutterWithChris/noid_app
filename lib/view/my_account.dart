@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noid_app/Model/current_user.dart';
 import 'package:noid_app/View/billing_info.dart';
 import 'package:noid_app/View/my_subscriptions.dart';
 import 'package:noid_app/View/shipping_addresses.dart';
 import 'package:noid_app/routes/route.dart';
+import 'package:noid_app/view/account_info.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/menu_item.dart';
 import 'package:noid_app/view/my_orders.dart';
+import 'package:noid_app/view/shipping_info.dart';
 import 'package:woocommerce/models/customer.dart';
-import 'package:noid_app/view/globals.dart' as globals;
+import 'package:noid_app/view/current_user.dart';
 
 class MyAccount extends StatelessWidget {
   MyAccount({Key? key}) : super(key: key);
-  WooCustomer? _currentUser = globals.currentUser;
 
   @override
   Widget build(BuildContext context) {
+    WooCustomer? _currentUser = CurrentUser.instance;
+
     return Scaffold(
       appBar: MainAppBar(),
       bottomNavigationBar: BottomNavBar(),
@@ -32,9 +34,16 @@ class MyAccount extends StatelessWidget {
           SizedBox(
             //Name Plate
             child: Text(
-              _currentUser!.firstName + " " + _currentUser!.lastName,
+              _currentUser!.firstName + " " + _currentUser.lastName,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              _currentUser!.email,
+              textAlign: TextAlign.center,
             ),
           ),
           SizedBox(
@@ -45,6 +54,12 @@ class MyAccount extends StatelessWidget {
             widthFactor: 0.8,
             child: Column(
               children: [
+                MenuItem(
+                  itemName: 'Account Info',
+                  leadingIcon: Icon(Icons.person),
+                  onTap: () => Get.to(() => AccountInfo()),
+                ),
+                Divider(),
                 MenuItem(
                   itemName: 'My Orders',
                   leadingIcon: Icon(Icons.checklist),
@@ -61,14 +76,14 @@ class MyAccount extends StatelessWidget {
                     onTap: () => Get.to(MySubscriptions())),
                 Divider(),
                 MenuItem(
-                    itemName: 'Billing Info',
+                    itemName: 'Billing',
                     leadingIcon: Icon(Icons.toll),
                     onTap: () => Get.to(() => BillingInfo())),
                 Divider(),
                 MenuItem(
-                  itemName: 'Shipping Addresses',
+                  itemName: 'Shipping',
                   leadingIcon: Icon(Icons.home_outlined),
-                  onTap: () => Get.to(() => ShippingAddresses()),
+                  onTap: () => Get.to(() => ShippingInfo()),
                 ),
               ],
             ),

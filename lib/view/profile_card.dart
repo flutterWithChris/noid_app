@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/Controller/woo_controller.dart';
-import 'package:noid_app/Model/current_user.dart';
 import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/login_page.dart';
 import 'package:woocommerce/models/customer.dart';

@@ -7,7 +7,7 @@ import 'package:noid_app/view/main_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wp_json_api/models/responses/wp_user_register_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
-import 'globals.dart' as globals;
+import 'current_user.dart';
 
 import 'dart:convert' show json, base64, ascii;
 
@@ -110,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
 
                           //Set Current User
                           setUserPreferences(_currentUser);
-                          globals.currentUser = _currentUser;
+                          CurrentUser thisUser = CurrentUser();
+                          thisUser.setUser(_currentUser);
 
                           //Push to homepage
                           await Get.to(() => HomePage(),
