@@ -5,7 +5,7 @@ import 'package:woocommerce/models/order.dart';
 class OrderCard extends StatefulWidget {
   final WooOrder order;
 
-  OrderCard({
+  const OrderCard({
     Key? key,
     required this.order,
   }) : super(key: key);
@@ -22,15 +22,15 @@ class _OrderCardState extends State<OrderCard> {
     return Card(
       elevation: 1.5,
       child: ListTile(
-          leading: Icon(Icons.check_circle),
+          leading: const Icon(Icons.check_circle),
           minLeadingWidth: 35,
           title: Text('Order #' + widget.order.number,
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text(widget.order.status + '\n' + '\$' + widget.order.total,
-              style: TextStyle(height: 1.618)),
+              style: const TextStyle(height: 1.618)),
           tileColor: Colors.white,
-          trailing: Icon(Icons.arrow_forward_rounded),
-          contentPadding: EdgeInsets.all(25),
+          trailing: const Icon(Icons.arrow_forward_rounded),
+          contentPadding: const EdgeInsets.all(25),
           onTap: () => {
                 Navigator.push(
                   context,

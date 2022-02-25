@@ -4,7 +4,7 @@ import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/my_orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:woocommerce/models/customer.dart';
-import 'package:noid_app/view/current_user.dart';
+import 'package:noid_app/View/current_user.dart';
 
 class BillingInfo extends StatefulWidget {
   const BillingInfo({Key? key}) : super(key: key);
@@ -21,35 +21,24 @@ class _BillingInfoState extends State<BillingInfo> {
   TextEditingController zipController = TextEditingController();
   TextEditingController companyController = TextEditingController();
 
-  getBillingInfo() async {
+  getBillingInfo() {
     WooCustomer? _currentUser = CurrentUser.instance;
-    //print(user!.firstName + "is the damn user");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() async {
-      address1Controller.text = _currentUser!.billing.address1;
-      address2Controller.text = _currentUser!.billing.address2;
-      cityController.text = _currentUser!.billing.city;
-      stateController.text = _currentUser!.billing.state;
-      zipController.text = _currentUser!.billing.postcode;
-      companyController.text = _currentUser!.billing.company;
-    });
-  }
-
-  updateBillingInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    address1Controller.addListener(() {
-      prefs.setString('billingAddress1', address1Controller.text);
-      prefs.setString('billingAddress2', address2Controller.text);
-      prefs.setString('billingState', stateController.text);
-      prefs.setString('billingCity', cityController.text);
-      prefs.setString('billingZipcode', zipController.text);
-      prefs.setString('billingCompany', companyController.text);
-    });
+    if (_currentUser != null) {
+      address1Controller.text = _currentUser.billing.address1;
+      address2Controller.text = _currentUser.billing.address2;
+      cityController.text = _currentUser.billing.city;
+      stateController.text = _currentUser.billing.state;
+      zipController.text = _currentUser.billing.postcode;
+      companyController.text = _currentUser.billing.company;
+    } else {
+      print("Billing Info Error!");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     getBillingInfo();
+
     @override
     void dispose() {
       address1Controller.dispose();
@@ -60,15 +49,14 @@ class _BillingInfoState extends State<BillingInfo> {
       companyController.dispose();
     }
 
-    // print(_currentUser!.firstName + " is still set as user");
     return Scaffold(
-      appBar: MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      appBar: const MainAppBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: FutureBuilder(
           future: getBillingInfo(),
           builder: (context, snapshot) {
             if (snapshot == null) {
-              return isLoading();
+              return const IsLoading();
             } else {
               return Column(
                 children: [
@@ -76,7 +64,7 @@ class _BillingInfoState extends State<BillingInfo> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        Center(
+                        const Center(
                           heightFactor: 2.0,
                           child: Text(
                             "Billing Info",
@@ -93,7 +81,7 @@ class _BillingInfoState extends State<BillingInfo> {
                               // HEADING
                               TextFormField(
                                 controller: address1Controller,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -101,14 +89,14 @@ class _BillingInfoState extends State<BillingInfo> {
                               ),
                               TextFormField(
                                 controller: address2Controller,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
                                     label: Text('Address Line 2')),
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -116,7 +104,7 @@ class _BillingInfoState extends State<BillingInfo> {
                                 controller: cityController,
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -124,7 +112,7 @@ class _BillingInfoState extends State<BillingInfo> {
                                 controller: stateController,
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -132,7 +120,7 @@ class _BillingInfoState extends State<BillingInfo> {
                                 controller: zipController,
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -151,10 +139,4 @@ class _BillingInfoState extends State<BillingInfo> {
           }),
     );
   }
-}
-
-Future<SharedPreferences> _getPreferences() async {
-  var getPrefs = await SharedPreferences.getInstance();
-  SharedPreferences prefs = getPrefs;
-  return prefs;
 }

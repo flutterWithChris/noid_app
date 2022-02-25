@@ -5,7 +5,7 @@ import 'package:woocommerce/models/products.dart';
 class ProductCard extends StatefulWidget {
   final WooProduct currentProduct;
 
-  ProductCard({Key? key, required this.currentProduct}) : super(key: key);
+  const ProductCard({Key? key, required this.currentProduct}) : super(key: key);
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -34,11 +34,11 @@ class _ProductCardState extends State<ProductCard> {
               dense: true,
               title: Text(
                 widget.currentProduct.name,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              trailing: Icon(Icons.arrow_forward, size: 15),
+              trailing: const Icon(Icons.arrow_forward, size: 15),
               subtitle: Row(
-                children: [
+                children: const [
                   Icon(
                     Icons.circle,
                     color: Colors.lightGreen,

@@ -3,7 +3,7 @@ import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/my_orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:noid_app/view/current_user.dart';
+import 'package:noid_app/View/current_user.dart';
 import 'package:woocommerce/models/customer.dart';
 
 class ShippingInfo extends StatefulWidget {
@@ -21,18 +21,15 @@ class _ShippingInfoState extends State<ShippingInfo> {
   TextEditingController zipController = TextEditingController();
   TextEditingController companyController = TextEditingController();
 
-  getShippingInfo() async {
+  getShippingInfo() {
     WooCustomer? _currentUser = CurrentUser.instance;
     //print(user!.firstName + "is the damn user");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() async {
-      address1Controller.text = _currentUser!.shipping.address1;
-      address2Controller.text = _currentUser!.shipping.address2;
-      cityController.text = _currentUser!.shipping.city;
-      stateController.text = _currentUser!.shipping.state;
-      zipController.text = _currentUser!.shipping.postcode;
-      companyController.text = _currentUser!.shipping.company;
-    });
+    address1Controller.text = _currentUser!.shipping.address1;
+    address2Controller.text = _currentUser.shipping.address2;
+    cityController.text = _currentUser.shipping.city;
+    stateController.text = _currentUser.shipping.state;
+    zipController.text = _currentUser.shipping.postcode;
+    companyController.text = _currentUser.shipping.company;
   }
 
   updateBillingInfo() async {
@@ -62,13 +59,13 @@ class _ShippingInfoState extends State<ShippingInfo> {
 
     // print(_currentUser!.firstName + " is still set as user");
     return Scaffold(
-      appBar: MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      appBar: const MainAppBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: FutureBuilder(
           future: getShippingInfo(),
           builder: (context, snapshot) {
             if (snapshot == null) {
-              return isLoading();
+              return const IsLoading();
             } else {
               return Column(
                 children: [
@@ -76,7 +73,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        Center(
+                        const Center(
                           heightFactor: 2.0,
                           child: Text(
                             "Shipping Info",
@@ -93,7 +90,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                               // HEADING
                               TextFormField(
                                 controller: address1Controller,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -101,14 +98,14 @@ class _ShippingInfoState extends State<ShippingInfo> {
                               ),
                               TextFormField(
                                 controller: address2Controller,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
                                     label: Text('Address Line 2')),
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -116,7 +113,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                 controller: cityController,
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -124,7 +121,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                 controller: stateController,
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -132,7 +129,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
                                 controller: zipController,
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,

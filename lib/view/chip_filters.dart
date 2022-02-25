@@ -16,7 +16,7 @@ class _ChipFiltersState extends State<ChipFilters> {
   Widget build(BuildContext context) {
     return FilterChip(
       label: Text(widget.chipName),
-      labelStyle: TextStyle(color: Colors.white),
+      labelStyle: const TextStyle(color: Colors.white),
       checkmarkColor: Colors.white,
       showCheckmark: true,
       selectedColor: Colors.lightGreen,

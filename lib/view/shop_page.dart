@@ -34,13 +34,13 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: MainAppBar(),
-        bottomNavigationBar: BottomNavBar(),
+        appBar: const MainAppBar(),
+        bottomNavigationBar: const BottomNavBar(),
         body: Column(
           children: [
-            IntrinsicHeight(
+            const IntrinsicHeight(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(8.0),
                 child: SearchBar(),
               ),
             ),
@@ -48,13 +48,13 @@ class _ShopPageState extends State<ShopPage> {
               future: _getAllProducts(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
-                  return isLoading();
+                  return const IsLoading();
                 } else {
                   print("Products: " + snapshot.data.length.toString());
                   return Expanded(
                     child: GridView.builder(
                       itemCount: snapshot.data.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2, childAspectRatio: 0.70),
                       itemBuilder: (context, index) {
                         final product = snapshot.data[index];
@@ -75,11 +75,11 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-class isLoading extends StatelessWidget {
-  const isLoading({Key? key}) : super(key: key);
+class IsLoading extends StatelessWidget {
+  const IsLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: CircularProgressIndicator());
+    return const Center(child: CircularProgressIndicator());
   }
 }

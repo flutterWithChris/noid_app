@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/Controller/woo_controller.dart';
-import 'package:noid_app/view/home_page.dart';
-import 'package:noid_app/view/login_page.dart';
 import 'package:woocommerce/models/customer.dart';
 import 'login_page.dart';
 
@@ -22,12 +19,12 @@ class ProfileCard extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                leading: Icon(Icons.person),
+                leading: const Icon(Icons.person),
                 title:
                     Text(currentUser!.firstName + " " + currentUser!.lastName),
                 subtitle: Text(currentUser!.email),
               ),
-              Flexible(
+              const Flexible(
                 child: FractionallySizedBox(
                   widthFactor: 0.65,
                   child: LinearProgressIndicator(

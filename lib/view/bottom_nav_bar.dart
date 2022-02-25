@@ -6,7 +6,7 @@ import 'package:noid_app/view/shop_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class BottomNavBar extends StatefulWidget {
-  BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({Key? key}) : super(key: key);
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
@@ -25,13 +25,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
         switch (_currentIndex) {
           case 0:
             {
-              Get.to(() => HomePage());
+              Get.to(() => const HomePage());
             }
             break;
 
           case 1:
             {
-              Get.to(() => ShopPage());
+              Get.to(() => const ShopPage());
             }
             break;
 
@@ -43,16 +43,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
       }),
       items: [
         SalomonBottomBarItem(
-          icon: Icon(Icons.home),
-          title: Text('Home'),
+          icon: const Icon(Icons.home),
+          title: const Text('Home'),
         ),
         SalomonBottomBarItem(
-          icon: Icon(Icons.shopping_basket),
-          title: Text('Shop Now'),
+          icon: const Icon(Icons.shopping_basket),
+          title: const Text('Shop Now'),
         ),
         SalomonBottomBarItem(
-          icon: Icon(Icons.account_circle_rounded),
-          title: Text('My Account'),
+          icon: const Icon(Icons.account_circle_rounded),
+          title: const Text('My Account'),
         ),
       ],
     );

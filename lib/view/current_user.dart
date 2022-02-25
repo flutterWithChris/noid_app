@@ -1,7 +1,7 @@
 import 'package:woocommerce/models/customer.dart';
 
 class CurrentUser extends WooCustomer {
-  static CurrentUser _thisUser = CurrentUser._();
+  static final CurrentUser _thisUser = CurrentUser._();
   CurrentUser._();
 
   CurrentUser();

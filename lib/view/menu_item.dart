@@ -21,9 +21,9 @@ class _MenuItemState extends State<MenuItem> {
   Widget build(BuildContext context) {
     return ListTile(
       title:
-          Text(widget.itemName, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(widget.itemName, style: const TextStyle(fontWeight: FontWeight.bold)),
       leading: widget.leadingIcon,
-      trailing: Icon(Icons.arrow_forward),
+      trailing: const Icon(Icons.arrow_forward),
       onTap: widget.onTap,
     );
   }

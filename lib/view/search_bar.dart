@@ -90,7 +90,7 @@ class _SearchBarState extends State<SearchBar> {
       transitionCurve: Curves.easeInOut,
       transitionDuration: const Duration(milliseconds: 500),
       builder: (context, transition) {
-        return ClipRRect(
+        return const ClipRRect(
             child: Material(
           color: Colors.white,
         ));

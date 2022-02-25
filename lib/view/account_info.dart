@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
-import 'package:noid_app/view/current_user.dart';
+import 'package:noid_app/View/current_user.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:woocommerce/models/customer.dart';
 
 import 'my_orders.dart';
 
-class AccountInfo extends StatelessWidget {
-  AccountInfo({Key? key}) : super(key: key);
+class AccountInfo extends StatefulWidget {
+  const AccountInfo({Key? key}) : super(key: key);
 
+  @override
+  State<AccountInfo> createState() => _AccountInfoState();
+}
+
+class _AccountInfoState extends State<AccountInfo> {
   TextEditingController firstNameController = TextEditingController();
+
   TextEditingController lastNameController = TextEditingController();
+
   TextEditingController emailController = TextEditingController();
+
   TextEditingController stateController = TextEditingController();
+
   TextEditingController zipController = TextEditingController();
+
   TextEditingController companyController = TextEditingController();
 
   getBillingInfo() async {
     WooCustomer? _currentUser = CurrentUser.instance;
-    //print(user!.firstName + "is the damn user");
-
     firstNameController.text = _currentUser!.firstName;
-    lastNameController.text = _currentUser!.lastName;
-    emailController.text = _currentUser!.email;
+    lastNameController.text = _currentUser.lastName;
+    emailController.text = _currentUser.email;
   }
 
   @override
@@ -34,13 +42,13 @@ class AccountInfo extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      appBar: const MainAppBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: FutureBuilder(
           future: getBillingInfo(),
           builder: (context, snapshot) {
             if (snapshot == null) {
-              return isLoading();
+              return const IsLoading();
             } else {
               return Column(
                 children: [
@@ -48,7 +56,7 @@ class AccountInfo extends StatelessWidget {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        Center(
+                        const Center(
                           heightFactor: 2.0,
                           child: Text(
                             "Account Info",
@@ -65,7 +73,7 @@ class AccountInfo extends StatelessWidget {
                               // HEADING
                               TextFormField(
                                 controller: firstNameController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -73,14 +81,14 @@ class AccountInfo extends StatelessWidget {
                               ),
                               TextFormField(
                                 controller: lastNameController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
                                     label: Text('Last Name')),
                               ),
                               TextFormField(
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     filled: true,
                                     fillColor: Colors.white70,
@@ -98,6 +106,5 @@ class AccountInfo extends StatelessWidget {
             }
           }),
     );
-    ;
   }
 }

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/Controller/woo_controller.dart';
-import 'package:noid_app/routes/route.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
+import 'package:noid_app/View/current_user.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:noid_app/view/order_card.dart';
-import 'package:noid_app/view/order_cards.dart';
 import 'package:woocommerce/woocommerce.dart';
-import 'current_user.dart' as globals;
+import 'package:intl/intl.dart';
 
 class MyOrders extends StatefulWidget {
-  MyOrders({Key? key}) : super(key: key);
+  const MyOrders({Key? key}) : super(key: key);
 
   @override
   State<MyOrders> createState() => _MyOrdersState();
 }
 
 class _MyOrdersState extends State<MyOrders> {
-  WooCommerce _wooController = wooController;
-  WooCustomer? user = globals.CurrentUser.instance;
+  final WooCommerce _wooController = wooController;
+  WooCustomer? user = CurrentUser.instance;
   List<WooOrder> allOrders = [];
   int count = 1;
 
@@ -40,12 +39,12 @@ class _MyOrdersState extends State<MyOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(15.0),
               child: Text(
                 "My Orders",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -56,7 +55,7 @@ class _MyOrdersState extends State<MyOrders> {
             future: _getMyOrders(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.data == null) {
-                return isLoading();
+                return const IsLoading();
               } else {
                 return ListView.builder(
                   shrinkWrap: true,
@@ -82,11 +81,11 @@ class _MyOrdersState extends State<MyOrders> {
   }
 }
 
-class isLoading extends StatelessWidget {
-  const isLoading({Key? key}) : super(key: key);
+class IsLoading extends StatelessWidget {
+  const IsLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: CircularProgressIndicator());
+    return const Center(child: CircularProgressIndicator());
   }
 }

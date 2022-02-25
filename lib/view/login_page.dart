@@ -2,41 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:noid_app/Controller/woo_controller.dart';
+import 'package:noid_app/View/current_user.dart';
 import 'package:noid_app/view/home_page.dart';
 import 'package:noid_app/view/main_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wp_json_api/models/responses/wp_user_register_response.dart';
-import 'package:wp_json_api/wp_json_api.dart';
-import 'current_user.dart';
-
-import 'dart:convert' show json, base64, ascii;
-
 import 'package:woocommerce/woocommerce.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  WooCommerce _wooCommerce = wooController;
   String _email = '';
   String _password = '';
-  late WPUserRegisterResponse wpUserRegisterResponse;
+
   @override
   Widget build(BuildContext context) {
-    WooCustomer currentUser;
 
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: const MainAppBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //TODO: Icon
-            SizedBox(
+            const SizedBox(
               child: Icon(Icons.account_circle_outlined, size: 125),
               height: 175,
             ),
@@ -45,14 +38,14 @@ class _LoginPageState extends State<LoginPage> {
               width: 280,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextField(
                     onChanged: (String value) {
                       _email = value;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       label: Text('Email'),
@@ -61,14 +54,14 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             SizedBox(
               width: 280,
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextField(
@@ -76,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     onChanged: (String value) {
                       _password = value;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       label: Text('Password'),
                       filled: true,
                       fillColor: Colors.white,
@@ -85,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             //TODO: Submit Buttons
@@ -114,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           thisUser.setUser(_currentUser);
 
                           //Push to homepage
-                          await Get.to(() => HomePage(),
+                          await Get.to(() => const HomePage(),
                               arguments: {'currentUser': _currentUser});
                         } else if (_currentUser.runtimeType != WooCustomer) {
                           print("Login Error");
@@ -124,8 +117,8 @@ class _LoginPageState extends State<LoginPage> {
                         //print(e);
                       }
                     },
-                    child: Text('Log In')),
-                SizedBox(
+                    child: const Text('Log In')),
+                const SizedBox(
                   width: 15,
                 ),
                 OutlinedButton(
@@ -134,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                           username: _email, password: _password, email: _email);
                       final result = wooController.createCustomer(newUser);
                     },
-                    child: Text('Sign Up')),
+                    child: const Text('Sign Up')),
               ],
             ),
             //TODO: Forgot Button
@@ -142,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   print("Forgot Pressed");
                 },
-                child: Text('Forgot Username/Password'))
+                child: const Text('Forgot Username/Password'))
           ],
         ),
       ),
@@ -158,27 +151,27 @@ void showLoginAlert(BuildContext context) {
         height: 150,
         child: Column(
           children: [
-            Text(
+            const Text(
               "Looks like somethings not quite right.",
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             ElevatedButton(
               onPressed: () => Get.back(),
-              child: Text("Try Again"),
+              child: const Text("Try Again"),
             ),
             TextButton(
                 onPressed: () => print("Forgot Pressed"),
-                child: Text(
+                child: const Text(
                   "I Can't Remember!",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 )),
           ],
         ),
       ),
-      title: Text(
+      title: const Text(
         "Oops..Let's Try Again!",
         textAlign: TextAlign.center,
         style: TextStyle(fontWeight: FontWeight.bold),

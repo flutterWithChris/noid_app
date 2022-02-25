@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:noid_app/Model/order.dart';
 import 'package:noid_app/view/bottom_nav_bar.dart';
 import 'package:noid_app/view/main_app_bar.dart';
@@ -8,25 +9,32 @@ import 'package:woocommerce/woocommerce.dart';
 class OrderDetails extends StatefulWidget {
   final WooOrder order;
 
-  OrderDetails({Key? key, required this.order}) : super(key: key);
+  const OrderDetails({Key? key, required this.order}) : super(key: key);
 
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
+  var dateFormat = DateFormat('yyyy-MM-ddZHH:nn:ss');
+  
+ formatDate(DateTime dateTime){
+   return formatDate(dateTime, dateFormat, ])
+ }
+
+  var outputFormt = DateFormat('MM/dd/yyyy hh:mm a')
   @override
   Widget build(BuildContext context) {
     WooOrder _order = widget.order;
     List<Step> stepList() => [
-          Step(title: Text('Order Received'), content: Text('Test')),
-          Step(title: Text('Order Shipped'), content: Text('Test')),
-          Step(title: Text('Order Delivered'), content: Text('Test')),
+          const Step(title: Text('Order Received'), content: Text('Test')),
+          const Step(title: Text('Order Shipped'), content: Text('Test')),
+          const Step(title: Text('Order Delivered'), content: Text('Test')),
         ];
 
     return Scaffold(
-      appBar: MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      appBar: const MainAppBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: Column(
         children: [
           Expanded(
@@ -42,25 +50,25 @@ class _OrderDetailsState extends State<OrderDetails> {
                     child: ListTile(
                       title: Text(
                         'Order #' + _order.number,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                       subtitle: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.circle,
                             color: Colors.lightGreen,
                             size: 12,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
                               _order.status.toUpperCase(),
                               textAlign: TextAlign.left,
-                              style: TextStyle(height: 1.5),
+                              style: const TextStyle(height: 1.5),
                             ),
                           ),
                         ],
@@ -70,36 +78,42 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ),
                   ),
-                  // Buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FractionallySizedBox(
-                          widthFactor: .9,
-                          child: OutlinedButton(
-                            child: Text('Edit Order'),
-                            onPressed: () => null,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: FractionallySizedBox(
-                          widthFactor: .9,
+                  _order.status == "complete"
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: FractionallySizedBox(
+                                widthFactor: .9,
+                                child: OutlinedButton(
+                                  child: const Text('Edit Order'),
+                                  onPressed: () => null,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: FractionallySizedBox(
+                                widthFactor: .9,
+                                child: ElevatedButton(
+                                  child: const Text('Cancel Order'),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.red),
+                                  onPressed: () => null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : FractionallySizedBox(
+                          widthFactor: .80,
                           child: ElevatedButton(
-                            child: Text('Cancel Order'),
-                            style:
-                                ElevatedButton.styleFrom(primary: Colors.red),
-                            onPressed: () => null,
-                          ),
+                              onPressed: () => print("Reorder"),
+                              child: const Text("Reorder")),
                         ),
-                      ),
-                    ],
-                  ),
                   // Item List
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.all(8),
-                    child: Text(
+                    padding: const EdgeInsets.all(8),
+                    child: const Text(
                       'Items',
                       style: TextStyle(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.left,
@@ -110,29 +124,32 @@ class _OrderDetailsState extends State<OrderDetails> {
                     child: ListView(
                       children: [
                         ListTile(
-                          leading: Icon(Icons.offline_bolt),
+                          leading: const Icon(Icons.offline_bolt),
                           title: Text(
-                            'Lazarus Naturals CBD Oil',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            _order.lineItems.first.name,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text('3000mg | Chocolate Mint 2 Oz.'),
+                          subtitle: Text(
+                              "ID: " + _order.lineItems.first.id.toString()),
                           trailing: Column(
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  'x2',
+                                  'x' +
+                                      _order.lineItems.first.quantity
+                                          .toString(),
                                   textAlign: TextAlign.right,
                                 ),
                               ),
-                              Text('\$70.00')
+                              Text('\$' + _order.lineItems.first.price)
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   // Shipping/Billing Info
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -144,7 +161,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             widthFactor: 0.5,
                             child: Column(
                               children: [
-                                Text(
+                                const Text(
                                   'Billed To:',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold, height: 2.0),
@@ -158,7 +175,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                         ),
                       ),
-                      VerticalDivider(
+                      const VerticalDivider(
                         color: Colors.black,
                       ),
                       Expanded(
@@ -168,7 +185,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             widthFactor: 0.5,
                             child: Column(
                               children: [
-                                Text(
+                                const Text(
                                   'Shipped To:',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold, height: 2.0),
@@ -186,7 +203,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ],
                   ),
-                  Divider(),
+                  const Divider(),
                   SizedBox(
                     child: Expanded(
                       child: Stepper(

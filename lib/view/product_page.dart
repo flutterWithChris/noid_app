@@ -8,7 +8,7 @@ import 'package:woocommerce/models/products.dart';
 class ProductPage extends StatefulWidget {
   final WooProduct product;
 
-  ProductPage({Key? key, required this.product}) : super(key: key);
+  const ProductPage({Key? key, required this.product}) : super(key: key);
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -22,8 +22,8 @@ class _ProductPageState extends State<ProductPage> {
     final WooProduct _product = widget.product;
 
     return Scaffold(
-      appBar: MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      appBar: const MainAppBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: ListView(
         children: [
           SizedBox(
@@ -32,16 +32,16 @@ class _ProductPageState extends State<ProductPage> {
           Column(
             children: [
               ListTile(
-                contentPadding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+                contentPadding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
                 dense: true,
                 title: Text(
                   _product.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 24, height: 1.618),
                 ),
                 trailing: Text(
                   '\$' + _product.regularPrice,
-                  style: TextStyle(fontSize: 18, height: 1.618),
+                  style: const TextStyle(fontSize: 18, height: 1.618),
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.fromLTRB(3, 15, 0, 0),
@@ -57,14 +57,14 @@ class _ProductPageState extends State<ProductPage> {
                               child: Text(
                                 quantity.toString(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
                             ),
                             _incrementButton(quantity),
-                            SizedBox(
+                            const SizedBox(
                               width: 25,
                             ),
                             ElevatedButton(
@@ -73,7 +73,7 @@ class _ProductPageState extends State<ProductPage> {
                                     itemId: _product.id.toString(),
                                     quantity: quantity.toString()),
                               },
-                              child: Text('Add To Cart'),
+                              child: const Text('Add To Cart'),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.lightGreen,
                               ),
@@ -90,8 +90,8 @@ class _ProductPageState extends State<ProductPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 5, 5, 5),
             child: Wrap(
-              children: [
-                Chip(
+              children: const [
+                 Chip(
                   backgroundColor: Colors.white,
                   avatar: Icon(
                     Icons.circle,
@@ -132,7 +132,7 @@ class _ProductPageState extends State<ProductPage> {
     return FloatingActionButton(
       elevation: .3,
       mini: true,
-      child: Icon(
+      child: const Icon(
         Icons.add,
         color: Colors.black87,
         size: 20,
@@ -150,7 +150,7 @@ class _ProductPageState extends State<ProductPage> {
     return FloatingActionButton(
       elevation: .3,
       mini: true,
-      child: Icon(
+      child: const Icon(
         Icons.remove,
         color: Colors.black87,
       ),
