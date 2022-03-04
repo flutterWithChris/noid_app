@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noid_app/view/home_page.dart';
-import 'package:noid_app/view/my_account.dart';
-import 'package:noid_app/view/shop_page.dart';
+import 'package:noid_app/presentation/screens/home_page.dart';
+import 'package:noid_app/presentation/screens/my_account.dart';
+import 'package:noid_app/presentation/screens/shop_page.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class BottomNavBar extends StatefulWidget {

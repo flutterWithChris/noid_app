@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/view/chip_filters.dart';
+import 'package:noid_app/presentation/widgets/chip_filters.dart';
 
 class CategorySelect extends StatelessWidget {
   const CategorySelect({Key? key}) : super(key: key);

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:noid_app/Model/order.dart';
-import 'package:noid_app/view/bottom_nav_bar.dart';
-import 'package:noid_app/view/main_app_bar.dart';
-import 'package:noid_app/view/order_card.dart';
-import 'package:noid_app/view/profile_card.dart';
+import 'package:noid_app/data/Model/current_user.dart';
+import 'package:noid_app/data/Model/order.dart';
+import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
+import 'package:noid_app/presentation/widgets/hero_slider.dart';
+import 'package:noid_app/presentation/widgets/main_app_bar.dart';
+import 'package:noid_app/presentation/widgets/profile_card.dart';
 import 'package:woocommerce/models/customer.dart';
-import 'hero_slider.dart';
-import 'current_user.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

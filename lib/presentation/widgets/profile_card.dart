@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:woocommerce/models/customer.dart';
-import 'login_page.dart';
 
 class ProfileCard extends StatelessWidget {
   WooCustomer? currentUser;

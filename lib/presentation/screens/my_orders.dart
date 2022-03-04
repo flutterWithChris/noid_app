@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/Controller/woo_controller.dart';
-import 'package:noid_app/view/bottom_nav_bar.dart';
-import 'package:noid_app/View/current_user.dart';
-import 'package:noid_app/view/main_app_bar.dart';
-import 'package:noid_app/view/order_card.dart';
+import 'package:noid_app/data/Model/current_user.dart';
+import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
+import 'package:noid_app/presentation/widgets/main_app_bar.dart';
+import 'package:noid_app/presentation/widgets/order_card.dart';
 import 'package:woocommerce/woocommerce.dart';
 import 'package:intl/intl.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/view/chip_filters.dart';
+import 'package:noid_app/presentation/widgets/chip_filters.dart';
+
 
 class SpectrumChips extends StatelessWidget {
   const SpectrumChips({Key? key}) : super(key: key);

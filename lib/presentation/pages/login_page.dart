@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:noid_app/Controller/woo_controller.dart';
-import 'package:noid_app/View/current_user.dart';
-import 'package:noid_app/view/home_page.dart';
-import 'package:noid_app/view/main_app_bar.dart';
+import 'package:noid_app/data/Model/current_user.dart';
+import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:noid_app/logic/login_cubit.dart';
+import 'package:noid_app/presentation/screens/home_page.dart';
+import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:woocommerce/woocommerce.dart';
 
@@ -21,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const MainAppBar(),
       body: Center(
@@ -86,38 +87,30 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
-                    onPressed: () async {
-                      var _currentUser = await wooController.loginCustomer(
-                          username: _email, password: _password);
-                      bool isLoggedIn =
-                          await wooController.isCustomerLoggedIn();
-                      try {
-                        // Check if user is logged in
-                        if (_currentUser is WooCustomer) {
-                          final token = wooController.authenticateViaJWT(
-                              username: _email, password: _password);
-                          print(_email +
-                              "testt logged in! " +
-                              wooController.fetchLoggedInUserId().toString());
+                  style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+                  onPressed: () {
+                    BlocProvider.of<LoginCubit>(context)
+                        .loginAttempt(_email, _password);
+                    BlocListener<LoginCubit, LoginState>(
+                      listener: (context, state) {
+                        if (state is LoginLoading) {
+                          showLoadingDialog(context);
 
-                          //Set Current User
-                          setUserPreferences(_currentUser);
-                          CurrentUser thisUser = CurrentUser();
-                          thisUser.setUser(_currentUser);
-
-                          //Push to homepage
-                          await Get.to(() => const HomePage(),
-                              arguments: {'currentUser': _currentUser});
-                        } else if (_currentUser.runtimeType != WooCustomer) {
-                          print("Login Error");
-                          showLoginAlert(context);
+                          return;
                         }
-                      } on Exception catch (e) {
-                        //print(e);
-                      }
-                    },
-                    child: const Text('Log In')),
+                        Navigator.of(context, rootNavigator: true).pop();
+                        if (state is LoginFailed) {
+                          showErrorDialog(context);
+                        }
+                        if (state is LoginSuccess) {
+                          showSuccessDialog(context);
+                        }
+                      },
+                      child: Container(),
+                    );
+                  },
+                  child: const Text('Log In'),
+                ),
                 const SizedBox(
                   width: 15,
                 ),
@@ -130,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: const Text('Sign Up')),
               ],
             ),
+
             //TODO: Forgot Button
             TextButton(
                 onPressed: () {
@@ -204,3 +198,33 @@ setUserPreferences(WooCustomer thisUser) async {
   await prefs.setString('billingCountry', thisUser.billing.country);
   await prefs.setString('billingCompany', thisUser.billing.company);
 }
+                  /*onPressed: () async {
+                                      var _currentUser = await wooController.loginCustomer(
+                                          username: _email, password: _password);
+                                      bool isLoggedIn =
+                                          await wooController.isCustomerLoggedIn();
+                                      try {
+                                        // Check if user is logged in
+                                        if (_currentUser is WooCustomer) {
+                                          final token = wooController.authenticateViaJWT(
+                                              username: _email, password: _password);
+                                          print(_email +
+                                              "testt logged in! " +
+                                              wooController.fetchLoggedInUserId().toString());
+                
+                                          //Set Current User
+                                          setUserPreferences(_currentUser);
+                                          CurrentUser thisUser = CurrentUser();
+                                          thisUser.setUser(_currentUser);
+                
+                                          //Push to homepage
+                                          await Get.to(() => const HomePage(),
+                                              arguments: {'currentUser': _currentUser});
+                                        } else if (_currentUser.runtimeType != WooCustomer) {
+                                          print("Login Error");
+                                          showLoginAlert(context);
+                                        }
+                                      } on Exception catch (e) {
+                                        //print(e);
+                                      }
+                                    },*/

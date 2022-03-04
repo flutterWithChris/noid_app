@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/view/order_card.dart';
+import 'package:noid_app/presentation/widgets/order_card.dart';
 
 class CurrentOrder extends StatefulWidget {
   OrderCard currentCard;

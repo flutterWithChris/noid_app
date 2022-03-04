@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/view/order_details.dart';
+import 'package:noid_app/presentation/pages/order_details.dart';
 import 'package:woocommerce/models/order.dart';
 
 class OrderCard extends StatefulWidget {

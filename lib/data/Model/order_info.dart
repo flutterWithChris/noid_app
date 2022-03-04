@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/Model/order.dart';
+import 'package:noid_app/data/Model/order.dart';
+
 
 class OrderInfo extends InheritedWidget {
   Order currentOrder = Order(

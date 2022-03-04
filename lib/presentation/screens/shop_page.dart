@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/Controller/woo_controller.dart';
-import 'package:noid_app/View/category_select.dart';
-import 'package:noid_app/view/bottom_nav_bar.dart';
-import 'package:noid_app/view/flavor_chips.dart';
-import 'package:noid_app/view/goal_chips.dart';
-import 'package:noid_app/view/main_app_bar.dart';
-import 'package:noid_app/view/product_card.dart';
-import 'package:noid_app/view/spectrum_chips.dart';
+import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
+import 'package:noid_app/presentation/widgets/main_app_bar.dart';
+import 'package:noid_app/presentation/widgets/product_card.dart';
+import 'package:noid_app/presentation/widgets/search_bar.dart';
 import 'package:woocommerce/models/products.dart';
 import 'package:woocommerce/woocommerce.dart';
-import 'search_bar.dart';
+
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
