@@ -16,7 +16,7 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  final WooCommerce _wooController = wooController;
+  final WooCommerce _wooController = WooRepo().wooController;
 
   Future<List<WooProduct>> _getAllProducts() async {
     var products = await _wooController.getProducts();

@@ -4,135 +4,199 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:noid_app/data/Model/current_user.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
-import 'package:noid_app/logic/login_cubit.dart';
-import 'package:noid_app/presentation/screens/home_page.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/logic/bloc/login_bloc.dart';
+import 'package:noid_app/presentation/pages/home_page.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:woocommerce/woocommerce.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final _formKey = GlobalKey<FormState>();
+
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _email = '';
-  String _password = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(),
-      body: Center(
+      appBar: MainAppBar(),
+      body: BlocProvider(
+        create: (context) => LoginBloc(
+          userRepo: context.read<UserRepo>(),
+        ),
+        child: _loginForm(),
+      ),
+    );
+  }
+}
+
+class _loginForm extends StatelessWidget {
+  const _loginForm({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //TODO: Icon
-            const SizedBox(
-              child: Icon(Icons.account_circle_outlined, size: 125),
-              height: 175,
-            ),
-            //TODO: Login Fields
-            SizedBox(
-              width: 280,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextField(
-                    onChanged: (String value) {
-                      _email = value;
-                    },
-                    decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      label: Text('Email'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            SizedBox(
-              width: 280,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextField(
-                    obscureText: true,
-                    onChanged: (String value) {
-                      _password = value;
-                    },
-                    decoration: const InputDecoration(
-                      label: Text('Password'),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            //TODO: Submit Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
-                  onPressed: () {
-                    BlocProvider.of<LoginCubit>(context)
-                        .loginAttempt(_email, _password);
-                    BlocListener<LoginCubit, LoginState>(
-                      listener: (context, state) {
-                        if (state is LoginLoading) {
-                          showLoadingDialog(context);
-
-                          return;
-                        }
-                        Navigator.of(context, rootNavigator: true).pop();
-                        if (state is LoginFailed) {
-                          showErrorDialog(context);
-                        }
-                        if (state is LoginSuccess) {
-                          showSuccessDialog(context);
-                        }
-                      },
-                      child: Container(),
-                    );
-                  },
-                  child: const Text('Log In'),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                OutlinedButton(
-                    onPressed: () async {
-                      WooCustomer newUser = WooCustomer(
-                          username: _email, password: _password, email: _email);
-                      final result = wooController.createCustomer(newUser);
-                    },
-                    child: const Text('Sign Up')),
-              ],
-            ),
-
-            //TODO: Forgot Button
-            TextButton(
-                onPressed: () {
-                  print("Forgot Pressed");
-                },
-                child: const Text('Forgot Username/Password'))
+          children: const [
+            _usernameField(),
+            _passwordField(),
+            _loginButton(),
           ],
         ),
       ),
+    );
+
+    Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //TODO: Icon
+          const SizedBox(
+            child: Icon(Icons.account_circle_outlined, size: 125),
+            height: 175,
+          ),
+          //TODO: Login Fields
+          SizedBox(
+            width: 280,
+            child: Column(
+              children: const [
+                SizedBox(
+                  height: 15,
+                ),
+                _usernameField(),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            width: 280,
+            child: Column(
+              children: const [
+                SizedBox(
+                  height: 15,
+                ),
+                _passwordField(),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          //TODO: Submit Buttons
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _loginButton(),
+              const SizedBox(
+                width: 15,
+              ),
+              OutlinedButton(
+                  onPressed: () async {}, child: const Text('Sign Up')),
+            ],
+          ),
+
+          //TODO: Forgot Button
+          TextButton(
+              onPressed: () {
+                print("Forgot Pressed");
+              },
+              child: const Text('Forgot Username/Password'))
+        ],
+      ),
+    );
+  }
+}
+
+class _loginButton extends StatelessWidget {
+  const _loginButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => LoginBloc(userRepo: context.read<UserRepo>()),
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          return ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+            onPressed: () {
+              print("Login Button Pressed");
+              print("Login Attempt Started");
+              //context.read<LoginBloc>().add(LoginSubmit());
+              context.read<LoginBloc>().add(LoginAttempt());
+              context.read<LoginBloc>().emit(LoginSuccess());
+            },
+            child: const Text('Log In'),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _passwordField extends StatelessWidget {
+  const _passwordField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          obscureText: true,
+          onChanged: (String value) {
+            context
+                .read<LoginBloc>()
+                .add(LoginPasswordChanged(password: value));
+          },
+          decoration: const InputDecoration(
+            label: Text('Password'),
+            filled: true,
+            fillColor: Colors.white,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _usernameField extends StatelessWidget {
+  const _usernameField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          onChanged: (String value) {
+            context
+                .read<LoginBloc>()
+                .add(LoginUsernameChanged(username: value));
+          },
+          decoration: const InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            label: Text('Email'),
+          ),
+          validator: (value) => null,
+        );
+      },
     );
   }
 }
@@ -176,7 +240,8 @@ void showLoginAlert(BuildContext context) {
 
 setUserPreferences(WooCustomer thisUser) async {
   final prefs = await SharedPreferences.getInstance();
-  bool isLoggedIn = await wooController.isCustomerLoggedIn();
+  var _wooController = WooRepo().wooController;
+  bool isLoggedIn = await _wooController.isCustomerLoggedIn();
 
   await prefs.setInt('userId', thisUser.id);
   await prefs.setString('firstName', thisUser.firstName);

@@ -161,7 +161,6 @@ class _ProductPageState extends State<ProductPage> {
 }
 
 void addToCart(WooProduct product, int quantity) {
-  wooController.addToMyCart(
+  WooRepo().wooController.addToMyCart(
       itemId: product.id.toString(), quantity: quantity.toString());
-  print(wooController.getMyCartItems());
 }

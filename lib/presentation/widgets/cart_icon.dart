@@ -36,7 +36,7 @@ class CartIcon extends StatelessWidget {
 }
 
 GetCartCount(int count) async {
-  List<WooCartItem> cartItems = await wooController.getMyCartItems();
+  List<WooCartItem> cartItems = await WooRepo().wooController.getMyCartItems();
   var cartCount = cartItems.length;
   count = cartCount;
 }

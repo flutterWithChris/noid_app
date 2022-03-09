@@ -15,7 +15,7 @@ class MyOrders extends StatefulWidget {
 }
 
 class _MyOrdersState extends State<MyOrders> {
-  final WooCommerce _wooController = wooController;
+  final WooCommerce _wooController = WooRepo().wooController;
   WooCustomer? user = CurrentUser.instance;
   List<WooOrder> allOrders = [];
   int count = 1;

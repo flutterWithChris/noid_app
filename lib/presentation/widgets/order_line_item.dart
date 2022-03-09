@@ -19,7 +19,7 @@ class OrderLineItem extends StatelessWidget {
       : super(key: key);
 
   Future<WooProduct> getProduct(int id) async {
-    WooProduct wooProduct = await wooController.getProductById(id: id);
+    WooProduct wooProduct = await WooRepo().wooController.getProductById(id: id);
     return wooProduct;
   }
 
@@ -27,7 +27,7 @@ class OrderLineItem extends StatelessWidget {
   Widget build(BuildContext context) {
     LineItems _product = product;
     Future<WooProduct> wooProduct =
-        wooController.getProductById(id: _product.productId);
+        WooRepo().wooController.getProductById(id: _product.productId);
 
     return ListTile(
       leading: Icon(Icons.offline_bolt),

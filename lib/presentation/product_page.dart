@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:noid_app/Model/woo_controller.dart';
+import 'package:noid_app/data/Model/woo_controller.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/cart_icon.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -8,8 +8,9 @@ import 'package:woocommerce/models/products.dart';
 
 class ProductPage extends StatefulWidget {
   final WooProduct product;
+  var _wooController = WooRepo().wooController;
 
-  const ProductPage({Key? key, required this.product}) : super(key: key);
+  ProductPage({Key? key, required this.product}) : super(key: key);
 
   @override
   State<ProductPage> createState() => _ProductPageState();
@@ -158,10 +159,4 @@ class _ProductPageState extends State<ProductPage> {
       },
     );
   }
-}
-
-void addToCart(WooProduct product, int quantity) {
-  wooController.addToMyCart(
-      itemId: product.id.toString(), quantity: quantity.toString());
-  print(wooController.getMyCartItems());
 }

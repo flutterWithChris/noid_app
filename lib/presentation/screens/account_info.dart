@@ -4,7 +4,7 @@ import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:woocommerce/models/customer.dart';
 
-import '../screens/my_orders.dart';
+import 'my_orders.dart';
 
 class AccountInfo extends StatefulWidget {
   const AccountInfo({Key? key}) : super(key: key);
