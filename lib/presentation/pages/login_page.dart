@@ -26,9 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: MainAppBar(),
       body: BlocProvider(
-        create: (context) => LoginBloc(
-          userRepo: context.read<UserRepo>(),
-        ),
+        create: (context) => LoginBloc(),
         child: _loginForm(),
       ),
     );
@@ -42,78 +40,19 @@ class _loginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LoginBloc loginBloc = BlocProvider.of<LoginBloc>(context);
+
     return Form(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             _usernameField(),
-            _passwordField(),
+            _passwordField(loginBloc: loginBloc),
             _loginButton(),
           ],
         ),
-      ),
-    );
-
-    Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          //TODO: Icon
-          const SizedBox(
-            child: Icon(Icons.account_circle_outlined, size: 125),
-            height: 175,
-          ),
-          //TODO: Login Fields
-          SizedBox(
-            width: 280,
-            child: Column(
-              children: const [
-                SizedBox(
-                  height: 15,
-                ),
-                _usernameField(),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          SizedBox(
-            width: 280,
-            child: Column(
-              children: const [
-                SizedBox(
-                  height: 15,
-                ),
-                _passwordField(),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          //TODO: Submit Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _loginButton(),
-              const SizedBox(
-                width: 15,
-              ),
-              OutlinedButton(
-                  onPressed: () async {}, child: const Text('Sign Up')),
-            ],
-          ),
-
-          //TODO: Forgot Button
-          TextButton(
-              onPressed: () {
-                print("Forgot Pressed");
-              },
-              child: const Text('Forgot Username/Password'))
-        ],
       ),
     );
   }
@@ -126,44 +65,38 @@ class _loginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginBloc(userRepo: context.read<UserRepo>()),
-      child: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) {
-          return ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
-            onPressed: () {
-              print("Login Button Pressed");
-              print("Login Attempt Started");
-              //context.read<LoginBloc>().add(LoginSubmit());
-              context.read<LoginBloc>().add(LoginAttempt());
-              context.read<LoginBloc>().emit(LoginSuccess());
-            },
-            child: const Text('Log In'),
-          );
-        },
-      ),
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+          onPressed: () {
+            print("Login Button Pressed");
+            print("Login Attempt Started");
+            //context.read<LoginBloc>().add(LoginSubmit());
+          },
+          child: const Text('Log In'),
+        );
+      },
     );
   }
 }
 
 class _passwordField extends StatelessWidget {
-  const _passwordField({
-    Key? key,
-  }) : super(key: key);
+  const _passwordField({Key? key, required LoginBloc loginBloc})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        return TextFormField(
+    return StreamBuilder(
+      stream: loin.stream,
+      builder: (context, snapshot) {
+        return TextField(
           obscureText: true,
           onChanged: (String value) {
-            context
-                .read<LoginBloc>()
-                .add(LoginPasswordChanged(password: value));
+            loginBloc.changePassword(value);
           },
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
+            errorText: snapshot.error.toString(),
             label: Text('Password'),
             filled: true,
             fillColor: Colors.white,
@@ -181,20 +114,18 @@ class _usernameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        return TextFormField(
-          onChanged: (String value) {
-            context
-                .read<LoginBloc>()
-                .add(LoginUsernameChanged(username: value));
-          },
-          decoration: const InputDecoration(
+    return StreamBuilder(
+      stream: BlocProvider.of<LoginBloc>(context).stream,
+      builder: (context, snapshot) {
+        return TextField(
+          keyboardType: TextInputType.emailAddress,
+          onChanged: loginBloc.changeEmail,
+          decoration: InputDecoration(
+            errorText: snapshot.error.toString(),
             filled: true,
             fillColor: Colors.white,
-            label: Text('Email'),
+            label: Text('Email Address'),
           ),
-          validator: (value) => null,
         );
       },
     );
