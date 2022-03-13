@@ -30,6 +30,16 @@ class UserRepo {
 
   get getCurrentUser => currentUser;
 
+  Future<bool> isLoggedIn() async {
+    var res = await userAPI.isSignedIn();
+    return res;
+  }
+
+  void logOut() {
+    userAPI.signOut();
+    print("**User Logged Out**");
+  }
+
   // Get Current User
   /* Future<User> getCurrentUser() async {
     await wooController.c

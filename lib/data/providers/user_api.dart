@@ -40,4 +40,8 @@ class UserAPI {
     var response = await WooRepo().wooController.isCustomerLoggedIn();
     return response;
   }
+
+  void signOut() {
+    _wooController.logUserOut();
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:woocommerce/models/customer.dart';
 
 class User extends Equatable {
   String? userId;
@@ -47,7 +46,6 @@ class User extends Equatable {
     this.shippingAddress,
     this.billingAddress,
   });
-
 
   @override
   // TODO: implement props

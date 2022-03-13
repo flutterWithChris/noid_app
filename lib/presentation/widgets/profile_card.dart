@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:woocommerce/models/customer.dart';
+import 'package:noid_app/data/Model/user.dart';
+
 
 class ProfileCard extends StatelessWidget {
-  WooCustomer? currentUser;
+  User currentUser;
 
   ProfileCard({Key? key, required this.currentUser}) : super(key: key);
 
@@ -20,8 +21,8 @@ class ProfileCard extends StatelessWidget {
               ListTile(
                 leading: const Icon(Icons.person),
                 title:
-                    Text(currentUser!.firstName + " " + currentUser!.lastName),
-                subtitle: Text(currentUser!.email),
+                    Text(currentUser.firstName! + " " + currentUser.lastName!),
+                subtitle: Text(currentUser.email!),
               ),
               const Flexible(
                 child: FractionallySizedBox(
