@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:noid_app/data/Model/user.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/data/repository/user_storage.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 
@@ -25,12 +24,14 @@ class _AccountInfoState extends State<AccountInfo> {
 
   TextEditingController companyController = TextEditingController();
 
+  getUserInfo() async {
+    firstNameController.text = (await UserStorage.getFirstName())!;
+    lastNameController.text = (await UserStorage.getLastName())!;
+    emailController.text = (await UserStorage.getEmail())!;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var _currentUser = UserRepo().getCurrentUser;
-    firstNameController.text = _currentUser.firstName!;
-    lastNameController.text = _currentUser.lastName!;
-    emailController.text = _currentUser.email!;
     void dispose() {
       firstNameController.dispose();
       lastNameController.dispose();
@@ -41,7 +42,7 @@ class _AccountInfoState extends State<AccountInfo> {
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
       body: FutureBuilder(
-          future: _currentUser,
+          future: getUserInfo(),
           builder: (context, snapshot) {
             return Column(
               children: [

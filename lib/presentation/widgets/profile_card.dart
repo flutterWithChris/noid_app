@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
+
 import 'package:noid_app/data/Model/user.dart';
+import 'package:noid_app/data/repository/user_storage.dart';
 
+class ProfileCard extends StatefulWidget {
+  String firstName = '';
+  String lastName = '';
+  String email = '';
+  ProfileCard({
+    Key? key,
+  }) : super(key: key);
 
-class ProfileCard extends StatelessWidget {
-  User currentUser;
+  @override
+  State<ProfileCard> createState() => _ProfileCardState();
+}
 
-  ProfileCard({Key? key, required this.currentUser}) : super(key: key);
+class _ProfileCardState extends State<ProfileCard> {
+  Future getFirstName() async {
+    final _firstName = await UserStorage.getFirstName() ?? '';
+    setState(() {
+      widget.firstName = _firstName;
+    });
+  }
+
+  Future getLastName() async {
+    final _lastName = await UserStorage.getLastName() ?? '';
+    setState(() {
+      widget.lastName = _lastName;
+    });
+  }
+
+  Future getEmail() async {
+    final _email = await UserStorage.getEmail() ?? '';
+    setState(() {
+      widget.email = _email;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    getFirstName();
+    getLastName();
+    getEmail();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -20,9 +53,8 @@ class ProfileCard extends StatelessWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.person),
-                title:
-                    Text(currentUser.firstName! + " " + currentUser.lastName!),
-                subtitle: Text(currentUser.email!),
+                title: Text(widget.firstName + " " + widget.lastName),
+                subtitle: Text(widget.email),
               ),
               const Flexible(
                 child: FractionallySizedBox(

@@ -7,6 +7,10 @@ import 'package:woocommerce/woocommerce.dart';
 class UserAPI {
   final WooCommerce _wooController = WooRepo().wooController;
 
+  String getToken() {
+    return _wooController.authToken;
+  }
+
   Future<WooCustomer?> loginWooCustomer(String _email, String _password) async {
     var _currentUser = await _wooController.loginCustomer(
         username: _email, password: _password);
@@ -14,8 +18,7 @@ class UserAPI {
     try {
       // Check if user is logged in
       if (_currentUser is WooCustomer) {
-        final token = _wooController.authenticateViaJWT(
-            username: _email, password: _password);
+        //final token = _wooController.authToken;
         print(_email +
             "testt logged in! " +
             _wooController.fetchLoggedInUserId().toString());

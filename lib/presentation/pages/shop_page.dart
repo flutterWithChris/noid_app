@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
+import 'package:noid_app/presentation/widgets/category_select.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/product_card.dart';
 import 'package:noid_app/presentation/widgets/search_bar.dart';
 import 'package:woocommerce/models/products.dart';
 import 'package:woocommerce/woocommerce.dart';
-
 
 class ShopPage extends StatefulWidget {
   const ShopPage({Key? key}) : super(key: key);
@@ -34,12 +34,17 @@ class _ShopPageState extends State<ShopPage> {
         appBar: const MainAppBar(),
         bottomNavigationBar: const BottomNavBar(),
         body: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const IntrinsicHeight(
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SearchBar(),
               ),
+            ),
+            SizedBox(
+              child: CategorySelect(),
+              height: 75,
             ),
             FutureBuilder(
               future: _getAllProducts(),
@@ -51,8 +56,9 @@ class _ShopPageState extends State<ShopPage> {
                   return Expanded(
                     child: GridView.builder(
                       itemCount: snapshot.data.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 0.70),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, childAspectRatio: 0.70),
                       itemBuilder: (context, index) {
                         final product = snapshot.data[index];
                         return ProductCard(currentProduct: product);

@@ -24,17 +24,19 @@ class _BillingInfoState extends State<BillingInfo> {
   TextEditingController zipController = TextEditingController();
   TextEditingController companyController = TextEditingController();
 
-  getBillingInfo() {}
-
-  @override
-  Widget build(BuildContext context) {
-    User _currentUser = UserRepo().getCurrentUser;
-    address1Controller.text = _currentUser.billingAddress!;
+  getBillingInfo() {
+    /*address1Controller.text = _currentUser.billingAddress!;
     address2Controller.text = _currentUser.billingAddress!;
     cityController.text = _currentUser.billingAddress!;
     stateController.text = _currentUser.billingAddress!;
     zipController.text = _currentUser.billingAddress!;
-    companyController.text = _currentUser.billingAddress!;
+    companyController.text = _currentUser.billingAddress!;*/
+  }
+
+  @override
+  Widget build(BuildContext context) {
+   // User _currentUser = UserRepo().getCurrentUser;
+
 
     @override
     void dispose() {

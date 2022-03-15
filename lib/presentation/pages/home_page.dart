@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:noid_app/data/Model/order.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/data/repository/user_storage.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/hero_slider.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -35,11 +37,47 @@ class _HomePageState extends State<HomePage> {
       appBar: const MainAppBar(),
       body: ListView(
         children: [
-          ProfileCard(currentUser: userRepo.getCurrentUser),
+          ProfileCard(),
+          ReminderTile(),
           const HeroSlider(),
         ],
       ),
       bottomNavigationBar: const BottomNavBar(),
+    );
+  }
+}
+
+class ReminderTile extends StatelessWidget {
+  const ReminderTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: .9,
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25))),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ListTile(
+            title: const Text(
+              "Have you taken CBD today?",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            leading: const Icon(Icons.timer),
+            subtitle: Wrap(
+              children: [
+                TextButton(
+                    onPressed: () => print('Yes Pressed'),
+                    child: Text('Yes, I Did!')),
+                TextButton(
+                    onPressed: () => print('Yes Pressed'),
+                    child: Text('No, I Didn\'t.')),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

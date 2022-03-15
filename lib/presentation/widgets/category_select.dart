@@ -6,24 +6,21 @@ class CategorySelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text(
-          'Category',
-          textAlign: TextAlign.left,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Wrap(
+          spacing: 10,
+          children: [
+            ChipFilters(chipName: 'CBD Oil Tinctures'),
+            ChipFilters(chipName: 'CBD Gummies'),
+            ChipFilters(chipName: 'CBD Topicals'),
+            ChipFilters(chipName: 'CBD Flower/Vapes'),
+            ChipFilters(chipName: 'CBD For Pets'),
+          ],
         ),
       ),
-      Wrap(
-        spacing: 10,
-        children: [
-          ChipFilters(chipName: 'CBD Oil Tinctures'),
-          ChipFilters(chipName: 'CBD Gummies'),
-          ChipFilters(chipName: 'CBD Topicals'),
-          ChipFilters(chipName: 'CBD Flower/Vapes'),
-          ChipFilters(chipName: 'CBD For Pets'),
-        ],
-      ),
-    ]);
+    );
   }
 }

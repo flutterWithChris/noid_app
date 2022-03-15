@@ -16,11 +16,12 @@ class _ChipFiltersState extends State<ChipFilters> {
   Widget build(BuildContext context) {
     return FilterChip(
       label: Text(widget.chipName),
-      labelStyle: const TextStyle(color: Colors.white),
-      checkmarkColor: Colors.white,
+      labelStyle: const TextStyle(color: Colors.black87),
+      checkmarkColor: Colors.black87,
       showCheckmark: true,
-      selectedColor: Colors.lightGreen,
-      backgroundColor: Colors.lightBlue,
+      selectedColor: Colors.transparent,
+      backgroundColor: Colors.transparent,
+      shape: StadiumBorder(side: BorderSide()),
       selected: _isSelected,
       onSelected: (isSelected) {
         setState(() {
