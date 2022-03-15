@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:noid_app/data/Model/current_user.dart';
 import 'package:noid_app/data/Model/shipping_info.dart';
+import 'package:noid_app/data/Model/user.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/presentation/screens/account_info.dart';
 import 'package:noid_app/presentation/screens/billing_info.dart';
 import 'package:noid_app/presentation/screens/my_orders.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/menu_item.dart';
-import 'package:woocommerce/models/customer.dart';
 
 class MyAccount extends StatelessWidget {
   MyAccount({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    WooCustomer? _currentUser = CurrentUser.instance;
+    UserRepo userRepo = RepositoryProvider.of<UserRepo>(context);
+    User _currentUser = userRepo.getCurrentUser;
 
     return Scaffold(
       appBar: const MainAppBar(),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
       body: ListView(
         children: [
           const SizedBox(
@@ -30,7 +32,7 @@ class MyAccount extends StatelessWidget {
           SizedBox(
             //Name Plate
             child: Text(
-              _currentUser!.firstName + " " + _currentUser.lastName,
+              _currentUser.firstName! + " " + _currentUser.lastName!,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
@@ -38,7 +40,7 @@ class MyAccount extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              _currentUser.email,
+              _currentUser.email!,
               textAlign: TextAlign.center,
             ),
           ),
@@ -51,10 +53,14 @@ class MyAccount extends StatelessWidget {
             child: Column(
               children: [
                 MenuItem(
-                  itemName: 'Account Info',
-                  leadingIcon: const Icon(Icons.person),
-                  onTap: () => Get.to(() => const AccountInfo()),
-                ),
+                    itemName: 'Account Info',
+                    leadingIcon: const Icon(Icons.person),
+                    onTap: () {
+                      Get.to(() => RepositoryProvider(
+                            create: (context) => UserRepo(),
+                            child: const AccountInfo(),
+                          ));
+                    }),
                 const Divider(),
                 MenuItem(
                   itemName: 'My Orders',
@@ -69,7 +75,10 @@ class MyAccount extends StatelessWidget {
                 MenuItem(
                     itemName: 'Billing',
                     leadingIcon: const Icon(Icons.toll),
-                    onTap: () => Get.to(() => const BillingInfo())),
+                    onTap: () => Get.to(() => RepositoryProvider(
+                          create: (context) => UserRepo(),
+                          child: const BillingInfo(),
+                        ))),
                 const Divider(),
                 MenuItem(
                   itemName: 'Shipping',

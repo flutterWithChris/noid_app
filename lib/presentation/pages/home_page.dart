@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noid_app/data/Model/order.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    UserRepo userRepo = RepositoryProvider.of<UserRepo>(context);
     //RepositoryProvider.of<UserRepo>(context);
     //print(UserRepo.currentUser.firstName + " set as user");
 
@@ -33,7 +35,7 @@ class _HomePageState extends State<HomePage> {
       appBar: const MainAppBar(),
       body: ListView(
         children: [
-          ProfileCard(currentUser: UserRepo.currentUser!),
+          ProfileCard(currentUser: userRepo.getCurrentUser),
           const HeroSlider(),
         ],
       ),

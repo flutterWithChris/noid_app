@@ -1,10 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:noid_app/data/Model/current_user.dart';
+import 'package:noid_app/data/Model/user.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
-import 'package:woocommerce/models/customer.dart';
-
-import 'my_orders.dart';
 
 class AccountInfo extends StatefulWidget {
   const AccountInfo({Key? key}) : super(key: key);
@@ -26,15 +25,12 @@ class _AccountInfoState extends State<AccountInfo> {
 
   TextEditingController companyController = TextEditingController();
 
-  getBillingInfo() async {
-    WooCustomer? _currentUser = CurrentUser.instance;
-    firstNameController.text = _currentUser!.firstName;
-    lastNameController.text = _currentUser.lastName;
-    emailController.text = _currentUser.email;
-  }
-
   @override
   Widget build(BuildContext context) {
+    var _currentUser = UserRepo().getCurrentUser;
+    firstNameController.text = _currentUser.firstName!;
+    lastNameController.text = _currentUser.lastName!;
+    emailController.text = _currentUser.email!;
     void dispose() {
       firstNameController.dispose();
       lastNameController.dispose();
@@ -45,65 +41,61 @@ class _AccountInfoState extends State<AccountInfo> {
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
       body: FutureBuilder(
-          future: getBillingInfo(),
+          future: _currentUser,
           builder: (context, snapshot) {
-            if (snapshot == null) {
-              return const IsLoading();
-            } else {
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        const Center(
-                          heightFactor: 2.0,
-                          child: Text(
-                            "Account Info",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 24),
-                          ),
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      const Center(
+                        heightFactor: 2.0,
+                        child: Text(
+                          "Account Info",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
                         ),
-                        FractionallySizedBox(
-                          widthFactor: .9,
-                          child: Wrap(
-                            runSpacing: 20,
-                            children: [
-                              // HEADING
-                              TextFormField(
-                                controller: firstNameController,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    filled: true,
-                                    fillColor: Colors.white70,
-                                    label: Text('First Name')),
-                              ),
-                              TextFormField(
-                                controller: lastNameController,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    filled: true,
-                                    fillColor: Colors.white70,
-                                    label: Text('Last Name')),
-                              ),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    filled: true,
-                                    fillColor: Colors.white70,
-                                    label: Text('Email Address')),
-                                controller: emailController,
-                              ),
-                            ],
-                          ),
+                      ),
+                      FractionallySizedBox(
+                        widthFactor: .9,
+                        child: Wrap(
+                          runSpacing: 20,
+                          children: [
+                            // HEADING
+                            TextFormField(
+                              controller: firstNameController,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  filled: true,
+                                  fillColor: Colors.white70,
+                                  label: Text('First Name')),
+                            ),
+                            TextFormField(
+                              controller: lastNameController,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  filled: true,
+                                  fillColor: Colors.white70,
+                                  label: Text('Last Name')),
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  filled: true,
+                                  fillColor: Colors.white70,
+                                  label: Text('Email Address')),
+                              controller: emailController,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              );
-            }
+                ),
+              ],
+            );
           }),
     );
   }

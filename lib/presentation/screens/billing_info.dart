@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noid_app/data/Model/current_user.dart';
+import 'package:noid_app/data/Model/user.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/presentation/pages/shop_page.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -21,23 +24,17 @@ class _BillingInfoState extends State<BillingInfo> {
   TextEditingController zipController = TextEditingController();
   TextEditingController companyController = TextEditingController();
 
-  getBillingInfo() {
-    WooCustomer? _currentUser = CurrentUser.instance;
-    if (_currentUser != null) {
-      address1Controller.text = _currentUser.billing.address1;
-      address2Controller.text = _currentUser.billing.address2;
-      cityController.text = _currentUser.billing.city;
-      stateController.text = _currentUser.billing.state;
-      zipController.text = _currentUser.billing.postcode;
-      companyController.text = _currentUser.billing.company;
-    } else {
-      print("Billing Info Error!");
-    }
-  }
+  getBillingInfo() {}
 
   @override
   Widget build(BuildContext context) {
-    getBillingInfo();
+    User _currentUser = UserRepo().getCurrentUser;
+    address1Controller.text = _currentUser.billingAddress!;
+    address2Controller.text = _currentUser.billingAddress!;
+    cityController.text = _currentUser.billingAddress!;
+    stateController.text = _currentUser.billingAddress!;
+    zipController.text = _currentUser.billingAddress!;
+    companyController.text = _currentUser.billingAddress!;
 
     @override
     void dispose() {

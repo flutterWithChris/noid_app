@@ -26,24 +26,17 @@ class NoidApp extends StatefulWidget {
 class _NoidAppState extends State<NoidApp> {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      getPages: [
-        GetPage(
-            name: "/",
-            page: () => RepositoryProvider(
-                  create: (context) => UserRepo(),
-                  child: LoginPage(),
-                )),
-        GetPage(
-            name: "/home'",
-            page: () => RepositoryProvider(
-                  create: (context) => UserRepo(),
-                  child: HomePage(),
-                )),
-        GetPage(name: "/shop", page: () => const ShopPage()),
-        GetPage(name: "/my-account", page: () => MyAccount()),
-      ],
-      initialRoute: '/',
+    return RepositoryProvider(
+      create: (context) => UserRepo(),
+      child: GetMaterialApp(
+        getPages: [
+          GetPage(name: "/", page: () => LoginPage()),
+          GetPage(name: "/home'", page: () => HomePage()),
+          GetPage(name: "/shop", page: () => const ShopPage()),
+          GetPage(name: "/my-account", page: () => MyAccount()),
+        ],
+        initialRoute: '/',
+      ),
     );
   }
 }

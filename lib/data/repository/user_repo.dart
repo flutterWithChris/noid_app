@@ -6,29 +6,21 @@ import 'package:woocommerce/woocommerce.dart';
 
 class UserRepo {
   final UserAPI userAPI = UserAPI();
-  static User? currentUser;
 
-  Future<User?> loginUser(String username, String password) async {
+  Future<User> loginUser(String username, String password) async {
     print("User Repo Sign In Called");
     var user = await userAPI.loginWooCustomer(username, password);
-    var isLoggedIn = await userAPI.isSignedIn();
-    if (isLoggedIn == true) {
-      currentUser = User(
-          userId: user?.id.toString(),
-          username: user?.username,
-          firstName: user?.firstName,
-          lastName: user?.lastName,
-          email: user?.email,
-          shippingAddress: user?.shipping.address1,
-          billingAddress: user?.billing.address1);
-      print("User Signed In: ");
-      return currentUser;
-    } else if (isLoggedIn == false) {
-      return null;
-    }
+    final User _currentUser = User(
+        userId: user?.id.toString(),
+        username: user?.username,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
+        shippingAddress: user?.shipping.address1,
+        billingAddress: user?.billing.address1);
+    print("User Signed In: $username");
+    return _currentUser;
   }
-
-  get getCurrentUser => currentUser;
 
   Future<bool> isLoggedIn() async {
     var res = await userAPI.isSignedIn();

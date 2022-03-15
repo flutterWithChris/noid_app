@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/presentation/pages/home_page.dart';
 import 'package:noid_app/presentation/screens/my_account.dart';
 import 'package:noid_app/presentation/pages/shop_page.dart';
@@ -21,7 +23,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       currentIndex: _currentIndex,
       onTap: (i) => setState(() {
         _currentIndex = i;
-        print(_currentIndex);
         switch (_currentIndex) {
           case 0:
             {
@@ -37,7 +38,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
           case 2:
             {
-              Get.to(() => MyAccount());
+              Get.to(() => RepositoryProvider(
+                    create: (context) => UserRepo(),
+                    child: MyAccount(),
+                  ));
             }
         }
       }),
