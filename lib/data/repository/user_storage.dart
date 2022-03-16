@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:noid_app/presentation/screens/shipping_info.dart';
 import 'package:woocommerce/models/user.dart';
 
 class UserStorage {
@@ -10,9 +11,23 @@ class UserStorage {
   static const _lastName = 'lastName';
   static const _email = 'email';
   static const _userToken = 'userToken';
+  static const _billingInfo = 'billingInfo';
+  static const _shippingInfo = 'shippingInfo';
 
-  static Future setUserId(String userId) async =>
-      await _storage.write(key: _userId, value: userId);
+  static Future setBillingInfo(String billingInfo) async =>
+      await _storage.write(key: _billingInfo, value: billingInfo);
+
+  static Future<String?> getBillingInfo() async =>
+      await _storage.read(key: _billingInfo);
+
+  static Future setShippingInfo(String shippingInfo) async =>
+      await _storage.write(key: _shippingInfo, value: shippingInfo);
+
+  static Future<String?> getShippingInfo() async =>
+      await _storage.read(key: _shippingInfo);
+
+  static Future setUserId(int userId) async =>
+      await _storage.write(key: _userId, value: userId.toString());
 
   static Future<String?> getUserId() async => await _storage.read(key: _userId);
 

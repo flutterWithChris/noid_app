@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import 'package:noid_app/data/Model/shipping_info.dart';
+import 'package:noid_app/presentation/screens/shipping_info.dart';
 import 'package:noid_app/data/Model/user.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/data/repository/user_storage.dart';

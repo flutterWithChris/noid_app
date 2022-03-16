@@ -31,7 +31,7 @@ class _NoidAppState extends State<NoidApp> {
       child: GetMaterialApp(
         getPages: [
           GetPage(name: "/", page: () => LoginPage()),
-          GetPage(name: "/home'", page: () => HomePage()),
+          GetPage(name: "/home'", page: () => const HomePage()),
           GetPage(name: "/shop", page: () => const ShopPage()),
           GetPage(name: "/my-account", page: () => MyAccount()),
         ],

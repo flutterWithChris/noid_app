@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class ChipFilters extends StatefulWidget {
   String chipName = '';
+  Widget? avatar;
 
-  ChipFilters({Key? key, required this.chipName}) : super(key: key);
+  ChipFilters({Key? key, required this.chipName, this.avatar})
+      : super(key: key);
 
   @override
   State<ChipFilters> createState() => _ChipFiltersState();
@@ -21,6 +23,7 @@ class _ChipFiltersState extends State<ChipFilters> {
       showCheckmark: true,
       selectedColor: Colors.transparent,
       backgroundColor: Colors.transparent,
+      avatar: widget.avatar,
       shape: StadiumBorder(side: BorderSide()),
       selected: _isSelected,
       onSelected: (isSelected) {

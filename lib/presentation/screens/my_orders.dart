@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/data/Model/current_user.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/data/repository/user_storage.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/order_card.dart';
@@ -15,24 +17,18 @@ class MyOrders extends StatefulWidget {
 }
 
 class _MyOrdersState extends State<MyOrders> {
-  final WooCommerce _wooController = WooRepo().wooController;
-  WooCustomer? user = CurrentUser.instance;
   List<WooOrder> allOrders = [];
   int count = 1;
 
   Future<List<WooOrder>> _getMyOrders() async {
-    var orders = await _wooController.getOrders(customer: user!.id);
+    var id = await UserStorage.getUserId();
+    var orders = await UserRepo().getOrders(int.parse(id!));
     List<WooOrder> myOrders = [];
     for (var o in orders) {
       WooOrder order = o;
       myOrders.add(o);
     }
     return myOrders;
-  }
-
-  getOrders() async {
-    print(user?.id);
-    allOrders = await _wooController.getOrders(customer: user!.id);
   }
 
   @override

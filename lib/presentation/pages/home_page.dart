@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: [
           ProfileCard(),
-          ReminderTile(),
+          const ReminderTile(),
           const HeroSlider(),
         ],
       ),
@@ -53,26 +53,32 @@ class ReminderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: .9,
+      widthFactor: .95,
       child: Card(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(25))),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: ListTile(
             title: const Text(
-              "Have you taken CBD today?",
+              " Did you take your CBD today?",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            leading: const Icon(Icons.timer),
+            leading: const Icon(Icons.calendar_today_rounded),
             subtitle: Wrap(
               children: [
                 TextButton(
                     onPressed: () => print('Yes Pressed'),
-                    child: Text('Yes, I Did!')),
+                    child: const Text(
+                      'Yes, I Did!',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )),
                 TextButton(
                     onPressed: () => print('Yes Pressed'),
-                    child: Text('No, I Didn\'t.')),
+                    child: const Text(
+                      'No, I Didn\'t.',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    )),
               ],
             ),
           ),

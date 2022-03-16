@@ -44,6 +44,22 @@ class UserAPI {
     return response;
   }
 
+  Future<Billing> getBillingInfo(int id) async {
+    WooCustomer user = await WooRepo().wooController.getCustomerById(id: id);
+    return user.billing;
+  }
+
+  Future<Shipping> getShippingInfo(int id) async {
+    WooCustomer user = await WooRepo().wooController.getCustomerById(id: id);
+    return user.shipping;
+  }
+
+  Future<List<WooOrder>> getOrders(int id) async {
+    List<WooOrder> orders =
+        await WooRepo().wooController.getOrders(customer: id);
+    return orders;
+  }
+
   void signOut() {
     _wooController.logUserOut();
   }

@@ -38,13 +38,13 @@ class _ShopPageState extends State<ShopPage> {
           children: [
             const IntrinsicHeight(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: SearchBar(),
               ),
             ),
-            SizedBox(
+            const Padding(
+              padding: EdgeInsets.fromLTRB(8, 0, 8, 15),
               child: CategorySelect(),
-              height: 75,
             ),
             FutureBuilder(
               future: _getAllProducts(),

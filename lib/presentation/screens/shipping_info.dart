@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/data/Model/current_user.dart';
+import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/data/repository/user_storage.dart';
 import 'package:noid_app/presentation/screens/my_orders.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -23,27 +25,15 @@ class _ShippingInfoState extends State<ShippingInfo> {
   TextEditingController zipController = TextEditingController();
   TextEditingController companyController = TextEditingController();
 
-  getShippingInfo() {
-    WooCustomer? _currentUser = CurrentUser.instance;
-    //print(user!.firstName + "is the damn user");
-    address1Controller.text = _currentUser!.shipping.address1;
-    address2Controller.text = _currentUser.shipping.address2;
-    cityController.text = _currentUser.shipping.city;
-    stateController.text = _currentUser.shipping.state;
-    zipController.text = _currentUser.shipping.postcode;
-    companyController.text = _currentUser.shipping.company;
-  }
-
-  updateBillingInfo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    address1Controller.addListener(() {
-      prefs.setString('billingAddress1', address1Controller.text);
-      prefs.setString('billingAddress2', address2Controller.text);
-      prefs.setString('billingState', stateController.text);
-      prefs.setString('billingCity', cityController.text);
-      prefs.setString('billingZipcode', zipController.text);
-      prefs.setString('billingCompany', companyController.text);
-    });
+  getShippingInfo() async {
+    var id = await UserStorage.getUserId();
+    var shipping = await UserRepo().getShippingInfo(int.parse(id!));
+    address1Controller.text = shipping.address1;
+    address2Controller.text = shipping.address2;
+    cityController.text = shipping.city;
+    stateController.text = shipping.state;
+    zipController.text = shipping.postcode;
+    companyController.text = shipping.company;
   }
 
   @override
@@ -59,14 +49,14 @@ class _ShippingInfoState extends State<ShippingInfo> {
       companyController.dispose();
     }
 
-    // print(_currentUser!.firstName + " is still set as user");
+    // print(.firstName + " is still set as user");
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
       body: FutureBuilder(
           future: getShippingInfo(),
           builder: (context, snapshot) {
-            if (snapshot == null) {
+            if (snapshot.connectionState != ConnectionState.done) {
               return const IsLoading();
             } else {
               return Column(

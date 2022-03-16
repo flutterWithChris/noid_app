@@ -12,7 +12,7 @@ class UserRepo {
     print("User Repo Sign In Called");
     WooCustomer? user = await userAPI.loginWooCustomer(username, password);
     if (user != null) {
-      UserStorage.setUserId(user.id.toString());
+      UserStorage.setUserId(user.id);
       UserStorage.setUsername(user.username);
       UserStorage.setEmail(user.email);
       UserStorage.setFirstName(user.firstName);
@@ -32,6 +32,18 @@ class UserRepo {
   void logOut() {
     userAPI.signOut();
     print("**User Logged Out**");
+  }
+
+  Future<Billing> getBillingInfo(int id) {
+    return userAPI.getBillingInfo(id);
+  }
+
+  Future<Shipping> getShippingInfo(int id) {
+    return userAPI.getShippingInfo(id);
+  }
+
+  Future<List<WooOrder>> getOrders(int id) {
+    return userAPI.getOrders(id);
   }
 
   // Get Current User
