@@ -68,22 +68,26 @@ class _loginForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(30.0),
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 40),
               child: Hero(
                 tag: 'logo',
                 child: Image.network(
                   'https://noidbotanicals.com/wp-content/uploads/2020/08/Asset-2.png',
-                  height: 65,
+                  height: 75,
                 ),
               ),
             ),
             // ? Add Noid Logo to center?
             _usernameField(loginBloc: loginBloc),
+            const SizedBox(height: 20),
             _passwordField(loginBloc: loginBloc),
-            Wrap(
-              spacing: 25,
+            const SizedBox(height: 15),
+            Column(
               children: [
-                _loginButton(loginBloc: loginBloc),
+                FractionallySizedBox(
+                  child: _loginButton(loginBloc: loginBloc),
+                  widthFactor: .8,
+                ),
                 _logoutButton(loginBloc: loginBloc),
               ],
             ),
@@ -110,7 +114,10 @@ class _loginButton extends StatelessWidget {
       stream: loginBloc.submitValid,
       builder: (context, snapshot) {
         return ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Colors.lightGreen),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.lightGreen,
+            shape: const StadiumBorder(),
+          ),
           onPressed:
               snapshot.hasData ? () => loginBloc.add(LoginSubmit()) : null,
           child: const Text('Log In'),
@@ -135,8 +142,7 @@ class _logoutButton extends StatelessWidget {
     return StreamBuilder(
       stream: loginBloc.submitValid,
       builder: (context, snapshot) {
-        return ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Colors.lightBlue),
+        return TextButton(
           onPressed: () => loginBloc.add(LogOut()),
           child: const Text('Log Out'),
         );
@@ -152,7 +158,7 @@ class _passwordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: loginBloc.stream,
+      stream: loginBloc.password,
       builder: (context, snapshot) {
         return TextField(
           obscureText: true,
@@ -160,7 +166,8 @@ class _passwordField extends StatelessWidget {
             loginBloc.changePassword(value);
           },
           decoration: InputDecoration(
-            errorText: snapshot.error.toString(),
+            errorText:
+                snapshot.hasError == false ? null : snapshot.error.toString(),
             label: const Text('Password'),
             filled: true,
             fillColor: Colors.white,
@@ -188,13 +195,14 @@ class _usernameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: BlocProvider.of<LoginBloc>(context).stream,
+      stream: loginBloc.email,
       builder: (context, snapshot) {
         return TextField(
           keyboardType: TextInputType.emailAddress,
           onChanged: loginBloc.changeEmail,
           decoration: InputDecoration(
-            errorText: snapshot.error.toString(),
+            errorText:
+                snapshot.hasError == false ? null : snapshot.error.toString(),
             filled: true,
             fillColor: Colors.white,
             label: const Text('Email Address'),

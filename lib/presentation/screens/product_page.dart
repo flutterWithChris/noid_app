@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:noid_app/logic/bloc/cart/cart_bloc.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/cart_icon.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -16,11 +19,12 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  CartBloc cartBloc = CartBloc();
   int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
-    final WooProduct _product = widget.product;
+    final _product = widget.product;
 
     return Scaffold(
       appBar: const MainAppBar(),
@@ -28,9 +32,9 @@ class _ProductPageState extends State<ProductPage> {
       floatingActionButton: CartIcon(),
       body: ListView(
         children: [
-          SizedBox(
-            child: Image.network(_product.images[0].src),
-          ),
+          Hero(
+              tag: 'productImage-${widget.product.id}',
+              child: Image.network(_product.images[0].src)),
           Column(
             children: [
               ListTile(
@@ -99,7 +103,11 @@ class _ProductPageState extends State<ProductPage> {
                             width: 25,
                           ),
                           ElevatedButton(
-                            onPressed: () => {},
+                            onPressed: () => {
+                              cartBloc.selectedQuantity(quantity),
+                              cartBloc.addItem(_product),
+                              cartBloc.add(AddToCart()),
+                            },
                             child: const Text('Add To Cart'),
                             style: ElevatedButton.styleFrom(
                               primary: Colors.lightGreen,
@@ -158,9 +166,4 @@ class _ProductPageState extends State<ProductPage> {
       },
     );
   }
-}
-
-void addToCart(WooProduct product, int quantity) {
-  WooRepo().wooController.addToMyCart(
-      itemId: product.id.toString(), quantity: quantity.toString());
 }

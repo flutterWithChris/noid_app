@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:noid_app/presentation/screens/product_page.dart';
 import 'package:woocommerce/models/products.dart';
 
@@ -18,18 +19,16 @@ class _ProductCardState extends State<ProductCard> {
       child: Column(
         children: [
           SizedBox(
-              height: 190,
-              child: Image.network(widget.currentProduct.images[0].src)),
+            height: 190,
+            child: Hero(
+                tag: 'productImage-${widget.currentProduct.id}',
+                child: Image.network(widget.currentProduct.images[0].src)),
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 0),
             child: ListTile(
               onTap: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ProductPage(product: widget.currentProduct),
-                    ))
+                Get.to(() => ProductPage(product: widget.currentProduct)),
               },
               dense: true,
               title: Text(

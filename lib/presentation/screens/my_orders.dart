@@ -21,8 +21,8 @@ class _MyOrdersState extends State<MyOrders> {
   int count = 1;
 
   Future<List<WooOrder>> _getMyOrders() async {
-    var id = await UserStorage.getUserId();
-    var orders = await UserRepo().getOrders(int.parse(id!));
+    var userId = await UserStorage.getUserId();
+    var orders = await UserRepo().getOrders(int.parse(userId!));
     List<WooOrder> myOrders = [];
     for (var o in orders) {
       WooOrder order = o;
@@ -58,7 +58,6 @@ class _MyOrdersState extends State<MyOrders> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     //WooOrder order = allOrders[index];
-
                     final order = snapshot.data[index];
                     return OrderCard(order: order);
                   },
