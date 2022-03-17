@@ -14,14 +14,14 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-            height: 190,
-            child: Image.network(widget.currentProduct.images[0].src)),
-        Padding(
-          padding: const EdgeInsets.only(top: 0),
-          child: Card(
+    return Card(
+      child: Column(
+        children: [
+          SizedBox(
+              height: 190,
+              child: Image.network(widget.currentProduct.images[0].src)),
+          Padding(
+            padding: const EdgeInsets.only(top: 0),
             child: ListTile(
               onTap: () => {
                 Navigator.push(
@@ -48,9 +48,9 @@ class _ProductCardState extends State<ProductCard> {
                 ],
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

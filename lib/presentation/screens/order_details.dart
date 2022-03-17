@@ -142,6 +142,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   SizedBox(
                     //height: 300,
                     child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: orderItems.length,
                       itemBuilder: (BuildContext context, int index) {

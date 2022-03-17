@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/logic/bloc/login_bloc.dart';
 import 'package:noid_app/presentation/pages/home_page.dart';
+import 'package:noid_app/presentation/widgets/login_app_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainAppBar(),
       body: BlocProvider(
         create: (context) => LoginBloc(),
         child: BlocConsumer<LoginBloc, LoginState>(
@@ -67,6 +67,16 @@ class _loginForm extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Hero(
+                tag: 'logo',
+                child: Image.network(
+                  'https://noidbotanicals.com/wp-content/uploads/2020/08/Asset-2.png',
+                  height: 65,
+                ),
+              ),
+            ),
             // ? Add Noid Logo to center?
             _usernameField(loginBloc: loginBloc),
             _passwordField(loginBloc: loginBloc),
@@ -154,6 +164,13 @@ class _passwordField extends StatelessWidget {
             label: const Text('Password'),
             filled: true,
             fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(45.0),
+              borderSide: const BorderSide(
+                width: 0,
+                style: BorderStyle.none,
+              ),
+            ),
           ),
         );
       },
@@ -180,7 +197,14 @@ class _usernameField extends StatelessWidget {
             errorText: snapshot.error.toString(),
             filled: true,
             fillColor: Colors.white,
-            label: Text('Email Address'),
+            label: const Text('Email Address'),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(45.0),
+              borderSide: const BorderSide(
+                width: 0,
+                style: BorderStyle.none,
+              ),
+            ),
           ),
         );
       },

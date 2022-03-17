@@ -82,51 +82,111 @@ class _ShippingInfoState extends State<ShippingInfo> {
                               // HEADING
                               TextFormField(
                                 controller: address1Controller,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(45.0),
+                                      borderSide: const BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.white,
                                     label: Text('Address Line 1')),
                               ),
                               TextFormField(
                                 controller: address2Controller,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(45.0),
+                                      borderSide: const BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.white,
                                     label: Text('Address Line 2')),
                               ),
                               TextFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(45.0),
+                                      borderSide: const BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.white,
                                     label: Text('City')),
                                 controller: cityController,
                               ),
                               TextFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(45.0),
+                                      borderSide: const BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.white,
                                     label: Text('State')),
                                 controller: stateController,
                               ),
                               TextFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(45.0),
+                                      borderSide: const BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.white,
                                     label: Text('Zipcode')),
                                 controller: zipController,
                               ),
                               TextFormField(
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                decoration: InputDecoration(
+                                    suffixIcon: const Icon(Icons.lock),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(45.0),
+                                      borderSide: const BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white70,
+                                    fillColor: Colors.white,
                                     label: Text('Company')),
                                 controller: companyController,
+                              ),
+                              Center(
+                                child: FractionallySizedBox(
+                                  alignment: Alignment.center,
+                                  widthFactor: 0.9,
+                                  child: OutlinedButton(
+                                      onPressed: () => print("pressed"),
+                                      child: Wrap(
+                                        spacing: 12,
+                                        children: const [
+                                          Icon(
+                                            Icons.edit,
+                                            size: 15,
+                                          ),
+                                          Text("Edit"),
+                                        ],
+                                      )),
+                                ),
                               ),
                             ],
                           ),

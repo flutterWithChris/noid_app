@@ -67,27 +67,66 @@ class _AccountInfoState extends State<AccountInfo> {
                             // HEADING
                             TextFormField(
                               controller: firstNameController,
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                  suffixIcon: const Icon(Icons.lock),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderSide: const BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
                                   filled: true,
-                                  fillColor: Colors.white70,
-                                  label: Text('First Name')),
+                                  fillColor: Colors.white,
+                                  label: const Text('First Name')),
                             ),
                             TextFormField(
                               controller: lastNameController,
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                  suffixIcon: const Icon(Icons.lock),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderSide: const BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
                                   filled: true,
-                                  fillColor: Colors.white70,
-                                  label: Text('Last Name')),
+                                  fillColor: Colors.white,
+                                  label: const Text('Last Name')),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                  suffixIcon: const Icon(Icons.lock),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(45.0),
+                                    borderSide: const BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
                                   filled: true,
-                                  fillColor: Colors.white70,
+                                  fillColor: Colors.white,
                                   label: Text('Email Address')),
                               controller: emailController,
+                            ),
+                            Center(
+                              child: FractionallySizedBox(
+                                alignment: Alignment.center,
+                                widthFactor: 0.9,
+                                child: OutlinedButton(
+                                    onPressed: () => print("pressed"),
+                                    child: Wrap(
+                                      spacing: 12,
+                                      children: const [
+                                        Icon(
+                                          Icons.edit,
+                                          size: 15,
+                                        ),
+                                        Text("Edit"),
+                                      ],
+                                    )),
+                              ),
                             ),
                           ],
                         ),

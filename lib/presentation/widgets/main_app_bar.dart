@@ -12,10 +12,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.network(
-              'https://noidbotanicals.com/wp-content/uploads/2020/08/Asset-2.png',
-              fit: BoxFit.cover,
-              height: 40),
+          Hero(
+            tag: 'logo',
+            child: Image.network(
+                'https://noidbotanicals.com/wp-content/uploads/2020/08/Asset-2.png',
+                fit: BoxFit.cover,
+                height: 40),
+          ),
         ],
       ),
     );
