@@ -15,40 +15,54 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 190,
-            child: Hero(
+    return InkWell(
+      onTap: () {
+        Get.to(() => ProductPage(product: widget.currentProduct));
+      },
+      child: Card(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 190,
+              child: Hero(
                 tag: 'productImage-${widget.currentProduct.id}',
-                child: Image.network(widget.currentProduct.images[0].src)),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 0),
-            child: ListTile(
-              onTap: () => {
-                Get.to(() => ProductPage(product: widget.currentProduct)),
-              },
-              dense: true,
-              title: Text(
-                widget.currentProduct.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              trailing: const Icon(Icons.arrow_forward, size: 15),
-              subtitle: Row(
-                children: const [
-                  Icon(
-                    Icons.circle,
-                    color: Colors.lightGreen,
-                    size: 12,
-                  ),
-                  Text(' Full Spectrum'),
-                ],
+                child: Image.network(
+                  widget.currentProduct.images[0].src,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
               ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 0),
+              child: ListTile(
+                onTap: () => {
+                  Get.to(() => ProductPage(product: widget.currentProduct)),
+                },
+                dense: true,
+                title: Text(
+                  widget.currentProduct.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                trailing: const Icon(Icons.arrow_forward, size: 15),
+                subtitle: Row(
+                  children: const [
+                    Icon(
+                      Icons.circle,
+                      color: Colors.lightGreen,
+                      size: 12,
+                    ),
+                    Text(' Full Spectrum'),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

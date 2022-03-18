@@ -50,74 +50,87 @@ class _MyAccountState extends State<MyAccount> {
   @override
   Widget build(BuildContext context) {
     UserRepo userRepo = RepositoryProvider.of<UserRepo>(context);
+
     // User _currentUser = userRepo.getCurrentUser;
     getEmail();
     getFirstName();
     getLastName();
+    String initials = widget.firstName.characters.characterAt(0).toString() +
+        widget.lastName.characters.characterAt(0).toString();
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
-      body: ListView(
-        children: [
-          const SizedBox(
-            // Profile Icon
-            child: Icon(Icons.account_circle_outlined, size: 125),
-            height: 175,
-          ),
-          SizedBox(
-            //Name Plate
-            child: Text(
-              widget.firstName + " " + widget.lastName,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.email,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(
-            // White Space
-            height: 25,
-          ),
-          FractionallySizedBox(
-            widthFactor: 0.8,
-            child: Column(
-              children: [
-                MenuItem(
-                    itemName: 'Account Info',
-                    leadingIcon: const Icon(Icons.person),
-                    onTap: () {
-                      Get.to(() => const AccountInfo());
-                    }),
-                const Divider(),
-                MenuItem(
-                  itemName: 'My Orders',
-                  leadingIcon: const Icon(Icons.checklist),
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MyOrders(),
-                      )),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 100,
+              child: CircleAvatar(
+                radius: 40.0,
+                backgroundColor: Colors.white,
+                child: Text(
+                  initials,
+                  textScaleFactor: 2.0,
                 ),
-                const Divider(),
-                MenuItem(
-                    itemName: 'Billing',
-                    leadingIcon: const Icon(Icons.toll),
-                    onTap: () => Get.to(() => const BillingInfo())),
-                const Divider(),
-                MenuItem(
-                  itemName: 'Shipping',
-                  leadingIcon: const Icon(Icons.home_outlined),
-                  onTap: () => Get.to(() => const ShippingInfo()),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              //Name Plate
+              child: Text(
+                widget.firstName + " " + widget.lastName,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.email,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(
+              // White Space
+              height: 25,
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.8,
+              child: Column(
+                children: [
+                  MenuItem(
+                      itemName: 'Account Info',
+                      leadingIcon: const Icon(Icons.person),
+                      onTap: () {
+                        Get.to(() => const AccountInfo());
+                      }),
+                  const Divider(),
+                  MenuItem(
+                    itemName: 'My Orders',
+                    leadingIcon: const Icon(Icons.checklist),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MyOrders(),
+                        )),
+                  ),
+                  const Divider(),
+                  MenuItem(
+                      itemName: 'Billing',
+                      leadingIcon: const Icon(Icons.toll),
+                      onTap: () => Get.to(() => const BillingInfo())),
+                  const Divider(),
+                  MenuItem(
+                    itemName: 'Shipping',
+                    leadingIcon: const Icon(Icons.home_outlined),
+                    onTap: () => Get.to(() => const ShippingInfo()),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

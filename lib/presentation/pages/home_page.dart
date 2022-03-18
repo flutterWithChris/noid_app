@@ -7,7 +7,10 @@ import 'package:noid_app/data/repository/user_storage.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/hero_slider.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
+import 'package:noid_app/presentation/widgets/mood_tile.dart';
 import 'package:noid_app/presentation/widgets/profile_card.dart';
+import 'package:noid_app/presentation/widgets/reminder_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,73 +20,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String firstName = '';
+  Future getFirstName() async {
+    final _firstName = await UserStorage.getFirstName() ?? '';
+    firstName = _firstName;
+    return firstName;
+  }
+
   @override
   Widget build(BuildContext context) {
-    UserRepo userRepo = RepositoryProvider.of<UserRepo>(context);
-    //RepositoryProvider.of<UserRepo>(context);
-    //print(UserRepo.currentUser.firstName + " set as user");
-
-    final orders = List.generate(
-        5,
-        (index) => Order(
-            orderNumber: 12343,
-            orderDate: '12/2/22',
-            orderType: 'Online',
-            orderStatus: 'Shipped',
-            orderTotal: 93.45,
-            shippingAddress: '74 Peacock Ave'));
-
+    getFirstName();
     return Scaffold(
       appBar: const MainAppBar(),
-      body: ListView(
-        children: [
-          ProfileCard(),
-          const ReminderTile(),
-          const HeroSlider(),
-        ],
-      ),
-      bottomNavigationBar: const BottomNavBar(),
-    );
-  }
-}
-
-class ReminderTile extends StatelessWidget {
-  const ReminderTile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: .95,
-      child: Card(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25))),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: ListTile(
-            title: const Text(
-              " Did you take your CBD today?",
-              style: TextStyle(fontWeight: FontWeight.bold),
+      body: Scrollbar(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(25, 15, 0, 10),
+              child: SizedBox(
+                child: FutureBuilder(
+                    future: getFirstName(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Text(
+                          // TODO: Put this into an Expanded. So Size can be scaled for longer names.
+                          "Hey, $firstName!",
+                          textScaleFactor: 5.0,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
+              ),
             ),
-            leading: const Icon(Icons.calendar_today_rounded),
-            subtitle: Wrap(
-              children: [
-                TextButton(
-                    onPressed: () => print('Yes Pressed'),
-                    child: const Text(
-                      'Yes, I Did!',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )),
-                TextButton(
-                    onPressed: () => print('Yes Pressed'),
-                    child: const Text(
-                      'No, I Didn\'t.',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )),
-              ],
-            ),
-          ),
+            // ProfileCard(),
+            const ReminderTile(),
+            const MoodTile(),
+            const HeroSlider(),
+          ],
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

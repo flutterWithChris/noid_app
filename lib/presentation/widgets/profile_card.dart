@@ -42,6 +42,8 @@ class _ProfileCardState extends State<ProfileCard> {
     getFirstName();
     getLastName();
     getEmail();
+    String initials = widget.firstName.characters.characterAt(0).toString() +
+        widget.lastName.characters.characterAt(0).toString();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -52,7 +54,10 @@ class _ProfileCardState extends State<ProfileCard> {
           child: Column(
             children: [
               ListTile(
-                leading: const Icon(Icons.person),
+                leading: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Text(initials),
+                ),
                 title: Text(widget.firstName + " " + widget.lastName),
                 subtitle: Text(widget.email),
               ),
