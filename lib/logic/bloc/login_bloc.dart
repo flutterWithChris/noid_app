@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
 import 'dart:async';
@@ -37,9 +40,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Validators {
     on<LoginRetry>(((event, emit) => emit(LoginInitial())));
     on<LoginSubmit>(((event, emit) async {
       emit(LoginLoading());
+      bool loginResponse = false;
       // * Login Success Check
-      bool loginSuccess = await submitLogin(_email, _password, userRepo);
-      loginSuccess ? emit(LoginSuccess()) : emit(LoginFail());
+      await submitLogin(_email, _password, userRepo);
+      await Future.delayed(Duration(seconds: 1), (() async {
+        loginResponse = await userRepo.isLoggedIn();
+      }));
+      loginResponse ? emit(LoginSuccess()) : emit(LoginFail());
     }));
   }
 }
@@ -49,11 +56,14 @@ Future<bool> submitLogin(BehaviorSubject _email, BehaviorSubject _password,
     UserRepo userRepo) async {
   final validEmail = _email.value;
   final validPassword = _password.value;
+  print(validEmail + " " + validPassword + " : attempted");
+  var logResponse;
 
   // * Wordpress API Login
-  userRepo.loginUser(validEmail, validPassword);
+  await userRepo.loginUser(validEmail, validPassword);
 
   // * Login Response Bool
-  var logResponse = await userRepo.isLoggedIn();
+  logResponse = await userRepo.isLoggedIn();
+
   return logResponse;
 }

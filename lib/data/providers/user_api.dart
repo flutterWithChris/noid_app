@@ -14,27 +14,14 @@ class UserAPI {
   Future<WooCustomer?> loginWooCustomer(String _email, String _password) async {
     var _currentUser = await _wooController.loginCustomer(
         username: _email, password: _password);
-    bool isLoggedIn = await _wooController.isCustomerLoggedIn();
-    try {
-      // Check if user is logged in
-      if (_currentUser is WooCustomer) {
-        //final token = _wooController.authToken;
-        print(_email +
-            "testt logged in! " +
-            _wooController.fetchLoggedInUserId().toString());
 
-        return _currentUser;
-
-        //Push to homepage
-        /* await Get.to(() => const HomePage(),
-                                              arguments: {'currentUser': _currentUser});*/
-
-      } else if (_currentUser.runtimeType != WooCustomer) {
-        print("Login Error");
-        return null;
-      }
-    } on Exception catch (e) {
-      //print(e);
+    if (_currentUser is WooCustomer) {
+      print('logged in *API');
+      return _currentUser;
+    } else if (_currentUser is String) {
+      print('not logged in (API)');
+      print(_currentUser.toString());
+      return null;
     }
   }
 
