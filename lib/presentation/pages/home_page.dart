@@ -37,23 +37,25 @@ class _HomePageState extends State<HomePage> {
           shrinkWrap: true,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(25, 15, 0, 10),
-              child: SizedBox(
-                child: FutureBuilder(
-                    future: getFirstName(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return Text(
-                          // TODO: Put this into an Expanded. So Size can be scaled for longer names.
-                          "Hey, $firstName!",
-                          textScaleFactor: 5.0,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }),
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: FutureBuilder(
+                  future: getFirstName(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return SizedBox(
+                        height: 75,
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            "Hey, $firstName!",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
             ),
             // ProfileCard(),
             const ReminderTile(),

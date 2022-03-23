@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:noid_app/data/providers/location_service.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/order_line_item.dart';
@@ -17,16 +21,72 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
+  Completer<GoogleMapController> _controller = Completer();
+
   var dateFormat = DateFormat('yyyy-MM-ddZHH:nn:ss');
+
+  final Set<Marker> _markers = Set<Marker>();
+  final Set<Marker> _destinationMarker = Set<Marker>();
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+
+  Set<Polygon> _polygons = Set<Polygon>();
+  List<LatLng> polyLatLangs = <LatLng>[];
+
+  final CameraPosition _noid = CameraPosition(
+    target: LatLng(40.9449734, -72.8204528),
+    zoom: 11.0,
+  );
+
+  Future<LatLng> _drawDestinationMarker() async {
+    Map<String, dynamic> place = await LocationService().getPlace('Ridge');
+    final double lat = place['geometry']['location']['lat'];
+    final double lng = place['geometry']['location']['lng'];
+    LatLng destination = LatLng(lat, lng);
+    return destination;
+  }
+
+  void _setMarker() async {
+    LatLng noid = await LatLng(40.9449734, -72.8204528);
+    LatLng dest = await _drawDestinationMarker();
+    setState(() {
+      _polygons.add(Polygon(
+        polygonId: PolygonId('shippingLine'),
+        points: [noid, dest],
+        strokeWidth: 3,
+        strokeColor: Colors.white,
+      ));
+      markers.addAll({
+        const MarkerId('noidMarker'): Marker(
+            markerId: const MarkerId('noidMarker'),
+            position: noid,
+            infoWindow: InfoWindow(title: 'Our Store!')),
+        const MarkerId('destMarker'): Marker(
+            markerId: const MarkerId('destMarker'),
+            position: dest,
+            infoWindow: InfoWindow(title: 'Destination')),
+      });
+    });
+
+    /*_markers.add(
+      Marker(markerId: const MarkerId('marker'), position: noidPoint),
+    );*/
+  }
+
+  void _setDestinationMarker(LatLng destination) {
+    setState(() {
+      markers.addAll({});
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setMarker();
+  }
 
   @override
   Widget build(BuildContext context) {
     WooOrder _order = widget.order;
-    List<Step> stepList() => [
-          const Step(title: Text('Order Received'), content: Text('Test')),
-          const Step(title: Text('Order Shipped'), content: Text('Test')),
-          const Step(title: Text('Order Delivered'), content: Text('Test')),
-        ];
     List<LineItems> orderItems = [];
 
     getOrderItems(WooOrder order) {
@@ -46,6 +106,8 @@ class _OrderDetailsState extends State<OrderDetails> {
       return dateFormat;
     }
 
+    int _polygonIdCounter = 1;
+
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
@@ -56,8 +118,19 @@ class _OrderDetailsState extends State<OrderDetails> {
                 // Order Top Details
                 children: [
                   SizedBox(
-                    child: Image.network(
-                        'https://media.wired.com/photos/5a6a61938c669c70314b300d/master/pass/Google-Map-US_10.jpg'),
+                    height: 250,
+                    child: GoogleMap(
+                        scrollGesturesEnabled: false,
+                        zoomControlsEnabled: false,
+                        zoomGesturesEnabled: false,
+                        // TODO: Set initial camera to midpoint between noid & dest
+                        initialCameraPosition: _noid,
+                        markers: Set<Marker>.of(markers.values),
+                        polygons: _polygons,
+                        myLocationEnabled: true,
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        }),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
@@ -124,7 +197,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                       : FractionallySizedBox(
                           widthFactor: .80,
                           child: ElevatedButton(
-                              onPressed: () => print("Reorder"),
+                              onPressed: () async {
+                                Map<String, dynamic> map =
+                                    await LocationService().getPlace('Ridge');
+                              },
                               child: const Text("Reorder")),
                         ),
                   // Item List

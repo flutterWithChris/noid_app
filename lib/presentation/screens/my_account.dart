@@ -55,8 +55,9 @@ class _MyAccountState extends State<MyAccount> {
     getEmail();
     getFirstName();
     getLastName();
-    String initials = widget.firstName.characters.characterAt(0).toString() +
-        widget.lastName.characters.characterAt(0).toString();
+    final String initials =
+        widget.firstName.characters.characterAt(0).toString() +
+            widget.lastName.characters.characterAt(0).toString();
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
@@ -66,14 +67,24 @@ class _MyAccountState extends State<MyAccount> {
           children: [
             SizedBox(
               height: 100,
-              child: CircleAvatar(
-                radius: 40.0,
-                backgroundColor: Colors.white,
-                child: Text(
-                  initials,
-                  textScaleFactor: 2.0,
-                ),
-              ),
+              child: FutureBuilder(
+                  future: getLastName(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData == true) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return CircleAvatar(
+                        radius: 40.0,
+                        backgroundColor: Colors.white,
+                        child: Text(
+                          initials,
+                          textScaleFactor: 2.0,
+                        ),
+                      );
+                    }
+                  }),
             ),
             SizedBox(
               //Name Plate
