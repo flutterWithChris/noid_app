@@ -12,7 +12,7 @@ class UserAPI {
   }
 
   Future<WooCustomer?> loginWooCustomer(String _email, String _password) async {
-    var _currentUser = await _wooController.loginCustomer(
+    WooCustomer? _currentUser = await _wooController.loginCustomer(
         username: _email, password: _password);
 
     if (_currentUser is WooCustomer) {

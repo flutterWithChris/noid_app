@@ -1,13 +1,15 @@
 import 'package:noid_app/data/Model/woo_controller.dart';
 import 'package:woocommerce/models/cart.dart';
 import 'package:woocommerce/models/cart_item.dart';
+import 'package:woocommerce/models/product_variation.dart';
 
 class CartApi {
   final _wooController = WooRepo().wooController;
 
   // * Add to Cart
   void addToCart(String itemId, String quantity) async {
-    await _wooController.addToMyCart(itemId: itemId, quantity: quantity);
+    await _wooController.addToMyCart(
+        itemId: itemId, quantity: quantity);
   }
 
 // * Remove Single Item

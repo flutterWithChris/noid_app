@@ -32,13 +32,17 @@ class _OrderDetailsState extends State<OrderDetails> {
   Set<Polygon> _polygons = Set<Polygon>();
   List<LatLng> polyLatLangs = <LatLng>[];
 
+  late Future<LatLng> noid;
+  late Future<LatLng> dest;
+
   final CameraPosition _noid = CameraPosition(
     target: LatLng(40.9449734, -72.8204528),
     zoom: 11.0,
   );
 
   Future<LatLng> _drawDestinationMarker() async {
-    Map<String, dynamic> place = await LocationService().getPlace('Ridge');
+    Map<String, dynamic> place = await LocationService().getPlace(
+        widget.order.shipping.city + ', ' + widget.order.shipping.state);
     final double lat = place['geometry']['location']['lat'];
     final double lng = place['geometry']['location']['lng'];
     LatLng destination = LatLng(lat, lng);
@@ -46,30 +50,34 @@ class _OrderDetailsState extends State<OrderDetails> {
   }
 
   void _setMarker() async {
-    LatLng noid = await LatLng(40.9449734, -72.8204528);
+    var controller = await _controller.future;
+    LatLng noid = const LatLng(40.9449734, -72.8204528);
     LatLng dest = await _drawDestinationMarker();
     setState(() {
       _polygons.add(Polygon(
         polygonId: PolygonId('shippingLine'),
         points: [noid, dest],
-        strokeWidth: 3,
-        strokeColor: Colors.white,
+        strokeWidth: 4,
+        strokeColor: Colors.lightBlue,
       ));
       markers.addAll({
         const MarkerId('noidMarker'): Marker(
             markerId: const MarkerId('noidMarker'),
+            consumeTapEvents: false,
             position: noid,
-            infoWindow: InfoWindow(title: 'Our Store!')),
+            infoWindow: const InfoWindow(title: 'Our Store!')),
         const MarkerId('destMarker'): Marker(
             markerId: const MarkerId('destMarker'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueGreen),
             position: dest,
-            infoWindow: InfoWindow(title: 'Destination')),
+            infoWindow: const InfoWindow(title: 'Destination')),
       });
+      _centerCamera(noid, dest);
     });
 
-    /*_markers.add(
-      Marker(markerId: const MarkerId('marker'), position: noidPoint),
-    );*/
+    controller.showMarkerInfoWindow(MarkerId('noidMarker'));
+    controller.showMarkerInfoWindow(MarkerId('destMarker'));
   }
 
   void _setDestinationMarker(LatLng destination) {
@@ -78,10 +86,32 @@ class _OrderDetailsState extends State<OrderDetails> {
     });
   }
 
+  Future<void> _centerCamera(LatLng noid, LatLng dest) async {
+    var center = computeCentroid([noid, dest]);
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newLatLng(center));
+    controller.animateCamera(CameraUpdate.newLatLngBounds(
+        LatLngBounds(southwest: dest, northeast: noid), 50.0));
+  }
+
   @override
   void initState() {
     super.initState();
     _setMarker();
+  }
+
+  LatLng computeCentroid(Iterable<LatLng> points) {
+    double latitude = 0;
+    double longitude = 0;
+    int n = points.length;
+
+    for (LatLng point in points) {
+      latitude += point.latitude;
+      longitude += point.longitude;
+    }
+
+    return LatLng(latitude / n, longitude / n);
   }
 
   @override
@@ -119,18 +149,22 @@ class _OrderDetailsState extends State<OrderDetails> {
                 children: [
                   SizedBox(
                     height: 250,
-                    child: GoogleMap(
-                        scrollGesturesEnabled: false,
-                        zoomControlsEnabled: false,
-                        zoomGesturesEnabled: false,
-                        // TODO: Set initial camera to midpoint between noid & dest
-                        initialCameraPosition: _noid,
-                        markers: Set<Marker>.of(markers.values),
-                        polygons: _polygons,
-                        myLocationEnabled: true,
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                        }),
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: GoogleMap(
+                          rotateGesturesEnabled: false,
+                          tiltGesturesEnabled: false,
+                          scrollGesturesEnabled: false,
+                          zoomControlsEnabled: false,
+                          zoomGesturesEnabled: false,
+                          initialCameraPosition: _noid,
+                          markers: Set<Marker>.of(markers.values),
+                          polygons: _polygons,
+                          myLocationEnabled: true,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          }),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),

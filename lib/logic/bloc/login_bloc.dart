@@ -43,7 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Validators {
       bool loginResponse = false;
       // * Login Success Check
       await submitLogin(_email, _password, userRepo);
-      await Future.delayed(Duration(seconds: 1), (() async {
+      await Future.delayed(const Duration(seconds: 1), (() async {
         loginResponse = await userRepo.isLoggedIn();
       }));
       loginResponse ? emit(LoginSuccess()) : emit(LoginFail());
