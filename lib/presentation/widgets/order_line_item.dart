@@ -1,3 +1,4 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
 import 'package:woocommerce/models/order.dart';
@@ -19,7 +20,8 @@ class OrderLineItem extends StatelessWidget {
       : super(key: key);
 
   Future<WooProduct> getProduct(int id) async {
-    WooProduct wooProduct = await WooRepo().wooController.getProductById(id: id);
+    WooProduct wooProduct =
+        await WooRepo().wooController.getProductById(id: id);
     return wooProduct;
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noid_app/data/Model/current_user.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:noid_app/data/providers/user_api.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/data/repository/user_storage.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
@@ -25,7 +26,6 @@ class _MyOrdersState extends State<MyOrders> {
     var orders = await UserRepo().getOrders(int.parse(userId!));
     List<WooOrder> myOrders = [];
     for (var o in orders) {
-      WooOrder order = o;
       myOrders.add(o);
     }
     return myOrders;
@@ -47,28 +47,30 @@ class _MyOrdersState extends State<MyOrders> {
               ),
             ),
           ),
-          FutureBuilder(
-            future: _getMyOrders(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.data == null) {
-                return const IsLoading();
-              } else {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    //WooOrder order = allOrders[index];
-                    final order = snapshot.data[index];
-                    return OrderCard(order: order);
-                  },
-                );
+          Expanded(
+            child: FutureBuilder(
+              future: _getMyOrders(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.data == null) {
+                  return const IsLoading();
+                } else {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      //WooOrder order = allOrders[index];
+                      WooOrder order = snapshot.data[index] as WooOrder;
+                      return OrderCard(order: order);
+                    },
+                  );
 
-                /*   return Container(
-                      child: Text("Nope"),
-                    );*/
+                  /*   return Container(
+                        child: Text("Nope"),
+                      );*/
 
-              }
-            },
+                }
+              },
+            ),
           ),
         ],
       ),

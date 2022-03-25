@@ -42,9 +42,9 @@ class UserAPI {
     return user.shipping;
   }
 
-  Future<List<WooOrder>> getOrders(int id) async {
+  Future<List<WooOrder>> getOrders(int customerId) async {
     List<WooOrder> orders =
-        await WooRepo().wooController.getOrders(customer: id);
+        await WooRepo().wooController.getOrders(customer: customerId);
     return orders;
   }
 

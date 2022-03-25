@@ -44,8 +44,12 @@ class _OrderDetailsState extends State<OrderDetails> {
   Future<LatLng> _drawDestinationMarker() async {
     /*   Map<String, dynamic> place = await LocationService().getPlace(
         widget.order.shipping.city + ', ' + widget.order.shipping.state);*/
-    Map<String, dynamic> place =
-        await LocationService().getPlace("Manhattan, NY");
+    Map<String, dynamic> place = await LocationService().getPlace(
+        widget.order.shipping.address1 +
+            ', ' +
+            widget.order.shipping.city +
+            ', ' +
+            widget.order.shipping.state);
     final double lat = place['geometry']['location']['lat'];
     final double lng = place['geometry']['location']['lng'];
     LatLng destination = LatLng(lat, lng);
@@ -96,7 +100,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     LatLngBounds bounds = LatLngBounds(southwest: dest, northeast: noid);
 
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 70.0));
+    controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
 
     await Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -131,11 +135,12 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Implement Flutter_Animarker for status updates on polyline
     WooOrder _order = widget.order;
     List<LineItems> orderItems = [];
 
     getOrderItems(WooOrder order) {
-      var _order = order;
+      WooOrder _order = order;
       for (var i = 0; i < order.lineItems.length; i++) {
         orderItems.add(order.lineItems.elementAt(i));
       }
@@ -145,9 +150,9 @@ class _OrderDetailsState extends State<OrderDetails> {
     print(orderItems.length.toString() + " items");
 
     String formatDate() {
-      var orderDate = DateTime.parse(_order.dateCompleted);
+      var orderDate = DateTime.parse(_order.dateCreated);
       var dateFormat =
-          DateFormat('MM/dd/yyyy' + ' - HH:mm a').format(orderDate);
+          DateFormat('MM/dd/yyyy' + ' - hh:mm a').format(orderDate);
       return dateFormat;
     }
 
