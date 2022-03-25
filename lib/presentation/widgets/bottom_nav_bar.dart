@@ -38,10 +38,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
           case 2:
             {
-              Get.to(() => RepositoryProvider(
-                    create: (context) => UserRepo(),
-                    child: MyAccount(),
-                  ));
+              Get.to(() => MyAccount());
             }
         }
       }),

@@ -28,23 +28,33 @@ class MyAccount extends StatefulWidget {
 class _MyAccountState extends State<MyAccount> {
   Future getFirstName() async {
     final _firstName = await UserStorage.getFirstName() ?? '';
-    setState(() {
-      widget.firstName = _firstName;
-    });
+    return _firstName;
   }
 
   Future getLastName() async {
     final _lastName = await UserStorage.getLastName() ?? '';
-    setState(() {
-      widget.lastName = _lastName;
-    });
+    return _lastName;
+  }
+
+  Future<String> getFullName() async {
+    final _firstName = await getFirstName();
+    final _lastName = await getLastName();
+    final _fullName = _firstName + ' ' + _lastName;
+    return _fullName;
   }
 
   Future getEmail() async {
     final _email = await UserStorage.getEmail() ?? '';
-    setState(() {
-      widget.email = _email;
-    });
+    return _email;
+  }
+
+  Future<String> getInitials() async {
+    String firstname = await getFirstName();
+    String lastname = await getLastName();
+    final String initials =
+        await firstname.characters.characterAt(0).toString() +
+            lastname.characters.characterAt(0).toString();
+    return initials;
   }
 
   @override
@@ -52,12 +62,7 @@ class _MyAccountState extends State<MyAccount> {
     UserRepo userRepo = RepositoryProvider.of<UserRepo>(context);
 
     // User _currentUser = userRepo.getCurrentUser;
-    getEmail();
-    getFirstName();
-    getLastName();
-    final String initials =
-        widget.firstName.characters.characterAt(0).toString() +
-            widget.lastName.characters.characterAt(0).toString();
+
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
@@ -68,39 +73,58 @@ class _MyAccountState extends State<MyAccount> {
             SizedBox(
               height: 100,
               child: FutureBuilder(
-                  future: getLastName(),
+                  future: getInitials(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData == true) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
+                    if (snapshot.connectionState == ConnectionState.done) {
                       return CircleAvatar(
                         radius: 40.0,
                         backgroundColor: Colors.white,
                         child: Text(
-                          initials,
+                          snapshot.data as String,
                           textScaleFactor: 2.0,
                         ),
                       );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
                     }
                   }),
             ),
             SizedBox(
               //Name Plate
-              child: Text(
-                widget.firstName + " " + widget.lastName,
-                textAlign: TextAlign.center,
-                style:
-                    const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
+              child: FutureBuilder(
+                  future: getFullName(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return Text(
+                        snapshot.data as String,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 32, fontWeight: FontWeight.bold),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.email,
-                textAlign: TextAlign.center,
-              ),
+              child: FutureBuilder(
+                  future: getEmail(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var fullname = snapshot.data as String;
+                      return Text(
+                        fullname,
+                        textAlign: TextAlign.center,
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
             ),
             const SizedBox(
               // White Space

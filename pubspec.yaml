@@ -58,6 +58,7 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   flutter_icons: ^1.1.0
   google_maps_flutter: ^2.1.2
+  maps_curved_line: ^1.0.2
 
 
 dev_dependencies:

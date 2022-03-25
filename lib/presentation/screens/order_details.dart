@@ -1,15 +1,15 @@
 import 'dart:async';
 
+import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_curved_line/maps_curved_line.dart';
 import 'package:noid_app/data/providers/location_service.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/order_line_item.dart';
 import 'package:woocommerce/models/order.dart';
-import 'package:woocommerce/woocommerce.dart';
-import 'package:basic_utils/basic_utils.dart';
 
 class OrderDetails extends StatefulWidget {
   final WooOrder order;
@@ -27,6 +27,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   final Set<Marker> _markers = Set<Marker>();
   final Set<Marker> _destinationMarker = Set<Marker>();
+  final Set<Polyline> _polylines = Set();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
   Set<Polygon> _polygons = Set<Polygon>();
@@ -35,14 +36,16 @@ class _OrderDetailsState extends State<OrderDetails> {
   late Future<LatLng> noid;
   late Future<LatLng> dest;
 
-  final CameraPosition _noid = CameraPosition(
+  final CameraPosition _noid = const CameraPosition(
     target: LatLng(40.9449734, -72.8204528),
     zoom: 11.0,
   );
 
   Future<LatLng> _drawDestinationMarker() async {
-    Map<String, dynamic> place = await LocationService().getPlace(
-        widget.order.shipping.city + ', ' + widget.order.shipping.state);
+    /*   Map<String, dynamic> place = await LocationService().getPlace(
+        widget.order.shipping.city + ', ' + widget.order.shipping.state);*/
+    Map<String, dynamic> place =
+        await LocationService().getPlace("Manhattan, NY");
     final double lat = place['geometry']['location']['lat'];
     final double lng = place['geometry']['location']['lng'];
     LatLng destination = LatLng(lat, lng);
@@ -54,30 +57,32 @@ class _OrderDetailsState extends State<OrderDetails> {
     LatLng noid = const LatLng(40.9449734, -72.8204528);
     LatLng dest = await _drawDestinationMarker();
     setState(() {
-      _polygons.add(Polygon(
-        polygonId: PolygonId('shippingLine'),
-        points: [noid, dest],
-        strokeWidth: 4,
-        strokeColor: Colors.lightBlue,
+      _polylines.add(Polyline(
+        polylineId: PolylineId("line 1"),
+        visible: true,
+        width: 3,
+        //latlng is List<LatLng>
+        points: MapsCurvedLines.getPointsOnCurve(
+            noid, dest), // Invoke lib to get curved line points
+        color: Colors.white,
       ));
-      markers.addAll({
-        const MarkerId('noidMarker'): Marker(
-            markerId: const MarkerId('noidMarker'),
-            consumeTapEvents: false,
-            position: noid,
-            infoWindow: const InfoWindow(title: 'Our Store!')),
-        const MarkerId('destMarker'): Marker(
+      _markers.add(
+        Marker(
             markerId: const MarkerId('destMarker'),
+            position: dest,
+            infoWindow: const InfoWindow(title: 'You!')),
+      );
+      _markers.add(
+        Marker(
+            markerId: const MarkerId('noid'),
+            position: noid,
             icon: BitmapDescriptor.defaultMarkerWithHue(
                 BitmapDescriptor.hueGreen),
-            position: dest,
-            infoWindow: const InfoWindow(title: 'Destination')),
-      });
+            infoWindow: const InfoWindow(title: 'Our Store!')),
+      );
+
       _centerCamera(noid, dest);
     });
-
-    controller.showMarkerInfoWindow(MarkerId('noidMarker'));
-    controller.showMarkerInfoWindow(MarkerId('destMarker'));
   }
 
   void _setDestinationMarker(LatLng destination) {
@@ -88,11 +93,21 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   Future<void> _centerCamera(LatLng noid, LatLng dest) async {
     var center = computeCentroid([noid, dest]);
+    LatLngBounds bounds = LatLngBounds(southwest: dest, northeast: noid);
 
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newLatLng(center));
-    controller.animateCamera(CameraUpdate.newLatLngBounds(
-        LatLngBounds(southwest: dest, northeast: noid), 50.0));
+    controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 70.0));
+
+    await Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        controller.showMarkerInfoWindow(const MarkerId('noid'));
+      });
+    });
+    await Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        controller.showMarkerInfoWindow(const MarkerId('destMarker'));
+      });
+    });
   }
 
   @override
@@ -152,16 +167,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                     child: AbsorbPointer(
                       absorbing: true,
                       child: GoogleMap(
-                          rotateGesturesEnabled: false,
-                          tiltGesturesEnabled: false,
-                          scrollGesturesEnabled: false,
                           zoomControlsEnabled: false,
-                          zoomGesturesEnabled: false,
                           initialCameraPosition: _noid,
-                          markers: Set<Marker>.of(markers.values),
-                          polygons: _polygons,
+                          markers: _markers,
+                          // polygons: _polygons,
+                          polylines: _polylines,
                           myLocationEnabled: true,
-                          onMapCreated: (GoogleMapController controller) {
+                          onMapCreated: (GoogleMapController controller) async {
                             _controller.complete(controller);
                           }),
                     ),

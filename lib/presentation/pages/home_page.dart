@@ -20,10 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String firstName = '';
-  Future getFirstName() async {
+  Future<String> getFirstName() async {
     final _firstName = await UserStorage.getFirstName() ?? '';
-    firstName = _firstName;
+    String firstName = _firstName;
     return firstName;
   }
 
@@ -42,6 +41,7 @@ class _HomePageState extends State<HomePage> {
                   future: getFirstName(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
+                      var firstName = snapshot.data as String;
                       return SizedBox(
                         height: 75,
                         child: FittedBox(

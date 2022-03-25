@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:woocommerce/woocommerce.dart';
 
 class HeroSlider extends StatelessWidget {
   const HeroSlider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    WooCommerce _controller = WooRepo().getWooController;
     // TODO: implement build
     return Card(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),

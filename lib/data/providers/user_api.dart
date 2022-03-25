@@ -16,7 +16,8 @@ class UserAPI {
         username: _email, password: _password);
 
     if (_currentUser is WooCustomer) {
-      print('logged in *API');
+      var firstname = await _currentUser.firstName;
+      print('$firstname logged in **(API)**');
       return _currentUser;
     } else if (_currentUser is String) {
       print('not logged in (API)');

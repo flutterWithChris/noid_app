@@ -13,7 +13,8 @@ import 'package:wp_json_api/wp_json_api.dart';
 
 void main() {
   runApp(const NoidApp());
-  WPJsonAPI.instance.initWith(baseUrl: "https://noidbotanicals.com");
+  WPJsonAPI.instance
+      .initWith(baseUrl: "https://wordpress-513850-2524483.cloudwaysapps.com/");
 }
 
 class NoidApp extends StatefulWidget {

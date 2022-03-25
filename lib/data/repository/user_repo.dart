@@ -10,9 +10,20 @@ class UserRepo {
 
   Future<User?> loginUser(String username, String password) async {
     print("User Repo Sign In Called");
-    await userAPI.loginWooCustomer(username, password);
+    WooCustomer? wooUser = await userAPI.loginWooCustomer(username, password);
+    if (wooUser != null) {
+      User currentUser = User();
+      currentUser.setUserId(wooUser.id);
+      currentUser.setEmail(wooUser.email);
+      currentUser.setFirstName(wooUser.firstName);
+      currentUser.setLastName(wooUser.lastName);
+      currentUser.setUsername(wooUser.username);
+    } else {
+      return null;
+    }
   }
 
+  // * Login Check
   Future<bool> isLoggedIn() async {
     var res = await userAPI.isSignedIn();
     return res;
