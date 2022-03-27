@@ -2,7 +2,7 @@ library authentication_repository;
 
 import 'dart:async';
 
-import 'package:box/box.dart';
+
 import 'package:noid_app/data/Model/user.dart';
 
 export 'authentication_repo.dart';
@@ -18,7 +18,6 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  late Box _users;
 
   Future<void> logIn({
     required String username,

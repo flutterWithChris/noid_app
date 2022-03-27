@@ -26,6 +26,22 @@ class OrderDetails extends StatefulWidget {
 
 class _OrderDetailsState extends State<OrderDetails> {
   Completer<GoogleMapController> _controller = Completer();
+  BitmapDescriptor? finishIcon;
+  BitmapDescriptor? clearIcon;
+  @override
+  void initState() {
+    super.initState();
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(32, 32)),
+            'lib/assets/finish_icon.png')
+        .then((value) => finishIcon = value);
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(size: Size(32, 32)),
+            'lib/assets/clear_icon.png')
+        .then((value) => clearIcon = value);
+    BlocProvider.of<OrderBloc>(context).setOrder(widget.order);
+    BlocProvider.of<OrderBloc>(context).add(ViewOrder());
+  }
 
   var dateFormat = DateFormat('yyyy-MM-ddZHH:nn:ss');
 
@@ -37,7 +53,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   Set<Polygon> _polygons = Set<Polygon>();
   List<LatLng> polyLatLangs = <LatLng>[];
 
-  late Future<LatLng> noid;
+  final LatLng noid = const LatLng(40.9449734, -72.8204528);
   late Future<LatLng> dest;
 
   final CameraPosition _noid = const CameraPosition(
@@ -45,7 +61,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     zoom: 11.0,
   );
 
-  Future<LatLng> _drawDestinationMarker() async {
+  Future<LatLng> _getDestination() async {
     /*   Map<String, dynamic> place = await LocationService().getPlace(
         widget.order.shipping.city + ', ' + widget.order.shipping.state);*/
     Map<String, dynamic> place = await LocationService().getPlace(
@@ -60,10 +76,13 @@ class _OrderDetailsState extends State<OrderDetails> {
     return destination;
   }
 
-  void _setMarker() async {
+  void _drawMarkers() async {
     var controller = await _controller.future;
-    LatLng noid = const LatLng(40.9449734, -72.8204528);
-    LatLng dest = await _drawDestinationMarker();
+
+    LatLng dest = await _getDestination();
+    int pointListCount = MapsCurvedLines.getPointsOnCurve(noid, dest).length;
+    LatLng centerPoint = MapsCurvedLines.getPointsOnCurve(noid, dest)
+        .elementAt(pointListCount ~/ 2);
     setState(() {
       _polylines.add(Polyline(
         polylineId: PolylineId("line 1"),
@@ -76,9 +95,23 @@ class _OrderDetailsState extends State<OrderDetails> {
       ));
       _markers.add(
         Marker(
-            markerId: const MarkerId('destMarker'),
-            position: dest,
-            infoWindow: const InfoWindow(title: 'You!')),
+          anchor: const Offset(0.0, 1.0),
+          //rotation: -40.0,
+          markerId: const MarkerId('destMarker'),
+          position: dest,
+          icon: finishIcon!,
+          //infoWindow: const InfoWindow(title: 'On The Way...'),
+        ),
+      );
+      _markers.add(
+        Marker(
+          anchor: const Offset(0.5, -0.2),
+          //rotation: -40.0,
+          markerId: const MarkerId('centerMarker'),
+          position: centerPoint,
+          icon: clearIcon!,
+          infoWindow: const InfoWindow(title: 'Order En Route!'),
+        ),
       );
       _markers.add(
         Marker(
@@ -90,6 +123,57 @@ class _OrderDetailsState extends State<OrderDetails> {
       );
 
       _centerCamera(noid, dest);
+    });
+    await Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        controller.showMarkerInfoWindow(const MarkerId('centerMarker'));
+      });
+    });
+  }
+
+  void _drawProcessingMarkers() async {
+    var controller = await _controller.future;
+
+    setState(() {
+      _markers.add(
+        Marker(
+            markerId: const MarkerId('noid'),
+            position: noid,
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueGreen),
+            infoWindow: const InfoWindow(title: 'Your Order!')),
+      );
+
+      // Center Camera
+      controller.animateCamera(CameraUpdate.newLatLngZoom(noid, 12.0));
+    });
+    await Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        controller.showMarkerInfoWindow(const MarkerId('noid'));
+      });
+    });
+  }
+
+  void _drawCompletedMarker() async {
+    var controller = await _controller.future;
+    LatLng dest = await _getDestination();
+
+    setState(() {
+      _markers.add(
+        Marker(
+            markerId: const MarkerId('destMarker'),
+            position: dest,
+            icon: finishIcon!,
+            infoWindow: const InfoWindow(title: 'Order Delivered!')),
+      );
+
+      // Center Camera
+      controller.animateCamera(CameraUpdate.newLatLngZoom(dest, 13.0));
+    });
+    await Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        controller.showMarkerInfoWindow(const MarkerId('destMarker'));
+      });
     });
   }
 
@@ -113,12 +197,6 @@ class _OrderDetailsState extends State<OrderDetails> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _setMarker();
-  }
-
   LatLng computeCentroid(Iterable<LatLng> points) {
     double latitude = 0;
     double longitude = 0;
@@ -131,6 +209,8 @@ class _OrderDetailsState extends State<OrderDetails> {
 
     return LatLng(latitude / n, longitude / n);
   }
+
+  int _currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -172,20 +252,27 @@ class _OrderDetailsState extends State<OrderDetails> {
                     height: 250,
                     child: BlocConsumer<OrderBloc, OrderState>(
                       listener: (context, state) {
+                        if (state is OrderProcessing) {
+                          _drawProcessingMarkers();
+                          _currentStep = 0;
+                        }
+                        if (state is OrderShipped) {
+                          _drawMarkers();
+                          _currentStep = 1;
+                        }
+                        if (state is OrderCompleted) {
+                          _drawCompletedMarker();
+                          _currentStep = 2;
+                        }
                         // TODO: implement listener
                       },
                       builder: (context, state) {
-                        BlocProvider.of<OrderBloc>(context).setOrder(_order);
-                        BlocProvider.of<OrderBloc>(context).add(ViewOrder());
                         if (state is OrderProcessing) {
                           return IgnorePointer(
                             child: GoogleMap(
                                 zoomControlsEnabled: false,
                                 initialCameraPosition: _noid,
                                 markers: _markers,
-                                polygons: _polygons,
-                                polylines: _polylines,
-                                myLocationEnabled: true,
                                 onMapCreated:
                                     (GoogleMapController controller) async {
                                   _controller.complete(controller);
@@ -200,7 +287,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 markers: _markers,
                                 polygons: _polygons,
                                 polylines: _polylines,
-                                myLocationEnabled: true,
                                 onMapCreated:
                                     (GoogleMapController controller) async {
                                   _controller.complete(controller);
@@ -213,9 +299,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 zoomControlsEnabled: false,
                                 initialCameraPosition: _noid,
                                 markers: _markers,
-                                polygons: _polygons,
-                                polylines: _polylines,
-                                myLocationEnabled: true,
                                 onMapCreated:
                                     (GoogleMapController controller) async {
                                   _controller.complete(controller);
@@ -229,6 +312,38 @@ class _OrderDetailsState extends State<OrderDetails> {
                       },
                     ),
                   ),
+                  SizedBox(
+                    height: 75,
+                    child: Theme(
+                      data: ThemeData(
+                        colorScheme: Theme.of(context)
+                            .colorScheme
+                            .copyWith(primary: Colors.lightGreen),
+                      ),
+                      child: Stepper(
+                        currentStep: 1,
+                        type: StepperType.horizontal,
+                        steps: [
+                          Step(
+                            title: Text('Processing'),
+                            content: Text(''),
+                            isActive: _currentStep >= 0,
+                          ),
+                          Step(
+                            title: Text('Shipped'),
+                            content: Text('Your order is on the way!!'),
+                            isActive: _currentStep >= 1,
+                          ),
+                          Step(
+                            title: Text('Completed'),
+                            content: Text('All done!'),
+                            isActive: _currentStep >= 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                     child: ListTile(
