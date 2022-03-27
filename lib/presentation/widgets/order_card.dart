@@ -1,6 +1,8 @@
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:noid_app/logic/bloc/order/order_bloc.dart';
 import 'package:noid_app/presentation/screens/order_details.dart';
 import 'package:woocommerce/models/order.dart';
 
@@ -26,23 +28,31 @@ class _OrderCardState extends State<OrderCard> {
       child: Card(
         elevation: 1.5,
         child: ListTile(
-            leading: const Icon(
-              Icons.check_circle,
-              color: Colors.lightGreen,
+          leading: const Icon(
+            Icons.check_circle,
+            color: Colors.lightGreen,
+          ),
+          minLeadingWidth: 35,
+          title: Text('Order #' + widget.order.number,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(
+              StringUtils.capitalize(widget.order.status) +
+                  '\n' +
+                  '\$' +
+                  widget.order.total,
+              style: const TextStyle(height: 1.618)),
+          tileColor: Colors.white,
+          trailing: const Icon(Icons.arrow_forward_rounded),
+          contentPadding: const EdgeInsets.all(25),
+          onTap: () => {
+            Get.to(
+              () => BlocProvider(
+                create: (context) => OrderBloc(),
+                child: OrderDetails(order: widget.order),
+              ),
             ),
-            minLeadingWidth: 35,
-            title: Text('Order #' + widget.order.number,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(
-                StringUtils.capitalize(widget.order.status) +
-                    '\n' +
-                    '\$' +
-                    widget.order.total,
-                style: const TextStyle(height: 1.618)),
-            tileColor: Colors.white,
-            trailing: const Icon(Icons.arrow_forward_rounded),
-            contentPadding: const EdgeInsets.all(25),
-            onTap: () => {Get.to(() => OrderDetails(order: widget.order))}),
+          },
+        ),
       ),
     );
   }

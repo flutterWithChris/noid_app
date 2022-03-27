@@ -2,14 +2,18 @@ import 'dart:async';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animarker/core/ripple_marker.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_curved_line/maps_curved_line.dart';
 import 'package:noid_app/data/providers/location_service.dart';
+import 'package:noid_app/logic/bloc/order/order_bloc.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/order_line_item.dart';
 import 'package:woocommerce/models/order.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 class OrderDetails extends StatefulWidget {
   final WooOrder order;
@@ -104,11 +108,6 @@ class _OrderDetailsState extends State<OrderDetails> {
 
     await Future.delayed(const Duration(seconds: 1), () {
       setState(() {
-        controller.showMarkerInfoWindow(const MarkerId('noid'));
-      });
-    });
-    await Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
         controller.showMarkerInfoWindow(const MarkerId('destMarker'));
       });
     });
@@ -158,6 +157,8 @@ class _OrderDetailsState extends State<OrderDetails> {
 
     int _polygonIdCounter = 1;
 
+    // * Set Order in Bloc
+
     return Scaffold(
       appBar: const MainAppBar(),
       bottomNavigationBar: const BottomNavBar(),
@@ -169,18 +170,63 @@ class _OrderDetailsState extends State<OrderDetails> {
                 children: [
                   SizedBox(
                     height: 250,
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: GoogleMap(
-                          zoomControlsEnabled: false,
-                          initialCameraPosition: _noid,
-                          markers: _markers,
-                          // polygons: _polygons,
-                          polylines: _polylines,
-                          myLocationEnabled: true,
-                          onMapCreated: (GoogleMapController controller) async {
-                            _controller.complete(controller);
-                          }),
+                    child: BlocConsumer<OrderBloc, OrderState>(
+                      listener: (context, state) {
+                        // TODO: implement listener
+                      },
+                      builder: (context, state) {
+                        BlocProvider.of<OrderBloc>(context).setOrder(_order);
+                        BlocProvider.of<OrderBloc>(context).add(ViewOrder());
+                        if (state is OrderProcessing) {
+                          return IgnorePointer(
+                            child: GoogleMap(
+                                zoomControlsEnabled: false,
+                                initialCameraPosition: _noid,
+                                markers: _markers,
+                                polygons: _polygons,
+                                polylines: _polylines,
+                                myLocationEnabled: true,
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  _controller.complete(controller);
+                                }),
+                          );
+                        }
+                        if (state is OrderShipped) {
+                          return IgnorePointer(
+                            child: GoogleMap(
+                                zoomControlsEnabled: false,
+                                initialCameraPosition: _noid,
+                                markers: _markers,
+                                polygons: _polygons,
+                                polylines: _polylines,
+                                myLocationEnabled: true,
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  _controller.complete(controller);
+                                }),
+                          );
+                        }
+                        if (state is OrderCompleted) {
+                          return IgnorePointer(
+                            child: GoogleMap(
+                                zoomControlsEnabled: false,
+                                initialCameraPosition: _noid,
+                                markers: _markers,
+                                polygons: _polygons,
+                                polylines: _polylines,
+                                myLocationEnabled: true,
+                                onMapCreated:
+                                    (GoogleMapController controller) async {
+                                  _controller.complete(controller);
+                                }),
+                          );
+                        } else {
+                          return const Center(
+                            child: Text('Error Loading Order!'),
+                          );
+                        }
+                      },
                     ),
                   ),
                   Padding(

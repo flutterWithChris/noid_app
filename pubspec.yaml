@@ -59,6 +59,8 @@ dependencies:
   flutter_icons: ^1.1.0
   google_maps_flutter: ^2.1.2
   maps_curved_line: ^1.0.2
+  flutter_animarker: ^3.2.0
+  avatar_glow: ^2.0.2
 
 
 dev_dependencies:

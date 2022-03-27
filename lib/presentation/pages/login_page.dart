@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
-import 'package:noid_app/logic/bloc/login_bloc.dart';
+import 'package:noid_app/logic/login/login_bloc.dart';
 import 'package:noid_app/presentation/pages/home_page.dart';
-import 'package:noid_app/presentation/widgets/login_app_bar.dart';
-import 'package:noid_app/presentation/widgets/main_app_bar.dart';
+
 
 class LoginPage extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();

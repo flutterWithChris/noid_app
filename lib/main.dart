@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
-import 'package:noid_app/logic/bloc/login_bloc.dart';
 import 'package:noid_app/presentation/pages/login_page.dart';
 import 'package:noid_app/presentation/pages/home_page.dart';
 import 'package:noid_app/presentation/screens/my_account.dart';

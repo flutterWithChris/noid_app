@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/logic/login/validators.dart';
 import 'dart:async';
 import 'validators.dart';
 import 'package:rxdart/rxdart.dart';
