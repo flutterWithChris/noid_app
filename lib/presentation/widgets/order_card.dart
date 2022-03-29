@@ -23,35 +23,69 @@ class _OrderCardState extends State<OrderCard> {
   Widget build(BuildContext context) {
     //print(OrderInfo.of(context)!.currentOrder.orderStatus);
     // Order Card
+
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(8.0),
       child: Card(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25))),
         elevation: 1.5,
-        child: ListTile(
-          leading: const Icon(
-            Icons.check_circle,
-            color: Colors.lightGreen,
-          ),
-          minLeadingWidth: 35,
-          title: Text('Order #' + widget.order.number,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text(
-              StringUtils.capitalize(widget.order.status) +
-                  '\n' +
-                  '\$' +
-                  widget.order.total,
-              style: const TextStyle(height: 1.618)),
-          tileColor: Colors.white,
-          trailing: const Icon(Icons.arrow_forward_rounded),
-          contentPadding: const EdgeInsets.all(25),
-          onTap: () => {
-            Get.to(
-              () => BlocProvider(
-                create: (context) => OrderBloc(),
-                child: OrderDetails(order: widget.order),
+        child: BlocProvider(
+          create: (context) => OrderBloc(),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: ListTile(
+              visualDensity: VisualDensity.compact,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              leading: BlocBuilder<OrderBloc, OrderState>(
+                builder: (context, state) {
+                  BlocProvider.of<OrderBloc>(context).setOrder(widget.order);
+                  BlocProvider.of<OrderBloc>(context).add(ViewOrder());
+                  if (state is OrderProcessing) {
+                    return const Icon(
+                      Icons.hourglass_bottom,
+                      color: Colors.black45,
+                    );
+                  }
+                  if (state is OrderShipped) {
+                    return const Icon(
+                      Icons.local_shipping,
+                      color: Colors.lightBlue,
+                    );
+                  }
+
+                  if (state is OrderCompleted) {
+                    return const Icon(
+                      Icons.check_circle,
+                      color: Colors.lightGreen,
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
               ),
+              minLeadingWidth: 35,
+              title: Text('Order #' + widget.order.number,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              subtitle: Text(
+                  StringUtils.capitalize(widget.order.status) +
+                      '\n' +
+                      '\$' +
+                      widget.order.total,
+                  style: const TextStyle(height: 1.618)),
+              tileColor: Colors.white,
+              trailing: const Icon(Icons.arrow_forward_rounded),
+              contentPadding: const EdgeInsets.all(25),
+              onTap: () => {
+                Get.to(
+                  () => BlocProvider(
+                    create: (context) => OrderBloc(),
+                    child: OrderDetails(order: widget.order),
+                  ),
+                ),
+              },
             ),
-          },
+          ),
         ),
       ),
     );

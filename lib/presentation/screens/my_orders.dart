@@ -31,6 +31,13 @@ class _MyOrdersState extends State<MyOrders> {
     return myOrders;
   }
 
+  Future<WooOrder> _getLastOrder() async {
+    var userId = await UserStorage.getUserId();
+    var orders = await UserRepo().getOrders(int.parse(userId!));
+
+    return orders.last;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

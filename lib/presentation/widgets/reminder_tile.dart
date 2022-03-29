@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class ReminderTile extends StatelessWidget {
   const ReminderTile({Key? key}) : super(key: key);
@@ -14,10 +15,10 @@ class ReminderTile extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: ListTile(
             title: const Text(
-              " Did you take your CBD today?",
+              "Time for some CBD!",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            leading: const Icon(Icons.calendar_today_rounded),
+            leading: const Icon(FontAwesome.clock_o),
             subtitle: Wrap(
               children: [
                 TextButton(

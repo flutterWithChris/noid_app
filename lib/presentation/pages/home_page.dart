@@ -8,9 +8,11 @@ import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/hero_slider.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
 import 'package:noid_app/presentation/widgets/mood_tile.dart';
+import 'package:noid_app/presentation/widgets/order_card.dart';
 import 'package:noid_app/presentation/widgets/profile_card.dart';
 import 'package:noid_app/presentation/widgets/reminder_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:woocommerce/models/order.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,6 +26,13 @@ class _HomePageState extends State<HomePage> {
     final _firstName = await UserStorage.getFirstName() ?? '';
     String firstName = _firstName;
     return firstName;
+  }
+
+  Future<WooOrder> _getLastOrder() async {
+    var userId = await UserStorage.getUserId();
+    var orders = await UserRepo().getOrders(int.parse(userId!));
+
+    return orders.first;
   }
 
   @override
@@ -58,6 +67,16 @@ class _HomePageState extends State<HomePage> {
                   }),
             ),
             // ProfileCard(),
+            FutureBuilder(
+              future: _getLastOrder(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return OrderCard(order: snapshot.data as WooOrder);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
             const ReminderTile(),
             const MoodTile(),
             const HeroSlider(),

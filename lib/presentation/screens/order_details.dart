@@ -91,11 +91,11 @@ class _OrderDetailsState extends State<OrderDetails> {
         //latlng is List<LatLng>
         points: MapsCurvedLines.getPointsOnCurve(
             noid, dest), // Invoke lib to get curved line points
-        color: Colors.white,
+        color: Colors.lightBlueAccent,
       ));
       _markers.add(
         Marker(
-          anchor: const Offset(0.0, 1.0),
+          anchor: const Offset(0.0, 0.5),
           //rotation: -40.0,
           markerId: const MarkerId('destMarker'),
           position: dest,
@@ -137,15 +137,16 @@ class _OrderDetailsState extends State<OrderDetails> {
     setState(() {
       _markers.add(
         Marker(
-            markerId: const MarkerId('noid'),
-            position: noid,
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueGreen),
-            infoWindow: const InfoWindow(title: 'Your Order!')),
+          markerId: const MarkerId('noid'),
+          position: noid,
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          infoWindow: const InfoWindow(title: 'Preparing Your Order!'),
+        ),
       );
 
       // Center Camera
-      controller.animateCamera(CameraUpdate.newLatLngZoom(noid, 12.0));
+      controller.animateCamera(CameraUpdate.newLatLngZoom(noid, 9.0));
     });
     await Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -161,6 +162,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     setState(() {
       _markers.add(
         Marker(
+            anchor: const Offset(0.0, 0.0),
             markerId: const MarkerId('destMarker'),
             position: dest,
             icon: finishIcon!,
@@ -248,6 +250,28 @@ class _OrderDetailsState extends State<OrderDetails> {
             child: ListView(shrinkWrap: true,
                 // Order Top Details
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Order #' + _order.number,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 28),
+                        ),
+                        Text(
+                          formatDate(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints.tight(Size.fromHeight(72)),
+                      child: OrderStatusStepper(currentStep: _currentStep),
+                    ),
+                  ),
                   SizedBox(
                     height: 250,
                     child: BlocConsumer<OrderBloc, OrderState>(
@@ -269,40 +293,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                       builder: (context, state) {
                         if (state is OrderProcessing) {
                           return IgnorePointer(
-                            child: GoogleMap(
-                                zoomControlsEnabled: false,
-                                initialCameraPosition: _noid,
+                            child: OrderProcessingMap(
+                                noid: _noid,
                                 markers: _markers,
-                                onMapCreated:
-                                    (GoogleMapController controller) async {
-                                  _controller.complete(controller);
-                                }),
+                                controller: _controller),
                           );
                         }
                         if (state is OrderShipped) {
                           return IgnorePointer(
-                            child: GoogleMap(
-                                zoomControlsEnabled: false,
-                                initialCameraPosition: _noid,
+                            child: OrderShippedMap(
+                                noid: _noid,
                                 markers: _markers,
                                 polygons: _polygons,
                                 polylines: _polylines,
-                                onMapCreated:
-                                    (GoogleMapController controller) async {
-                                  _controller.complete(controller);
-                                }),
+                                controller: _controller),
                           );
                         }
                         if (state is OrderCompleted) {
                           return IgnorePointer(
-                            child: GoogleMap(
-                                zoomControlsEnabled: false,
-                                initialCameraPosition: _noid,
+                            child: OrderCompletedMap(
+                                noid: _noid,
                                 markers: _markers,
-                                onMapCreated:
-                                    (GoogleMapController controller) async {
-                                  _controller.complete(controller);
-                                }),
+                                controller: _controller),
                           );
                         } else {
                           return const Center(
@@ -312,121 +324,18 @@ class _OrderDetailsState extends State<OrderDetails> {
                       },
                     ),
                   ),
-                  SizedBox(
-                    height: 75,
-                    child: Theme(
-                      data: ThemeData(
-                        colorScheme: Theme.of(context)
-                            .colorScheme
-                            .copyWith(primary: Colors.lightGreen),
-                      ),
-                      child: Stepper(
-                        currentStep: 1,
-                        type: StepperType.horizontal,
-                        steps: [
-                          Step(
-                            title: Text('Processing'),
-                            content: Text(''),
-                            isActive: _currentStep >= 0,
-                          ),
-                          Step(
-                            title: Text('Shipped'),
-                            content: Text('Your order is on the way!!'),
-                            isActive: _currentStep >= 1,
-                          ),
-                          Step(
-                            title: Text('Completed'),
-                            content: Text('All done!'),
-                            isActive: _currentStep >= 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                    child: ListTile(
-                      title: Text(
-                        'Order #' + _order.number,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                      ),
-                      subtitle: Row(
-                        children: [
-                          const Icon(
-                            Icons.circle,
-                            color: Colors.lightGreen,
-                            size: 12,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              StringUtils.capitalize(_order.status),
-                              textAlign: TextAlign.left,
-                              style: const TextStyle(height: 1.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                      trailing: Column(
-                        children: [
-                          Text(
-                            formatDate(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  _order.status == "complete"
-                      ? Row(
-                          children: [
-                            Expanded(
-                              child: FractionallySizedBox(
-                                widthFactor: .9,
-                                child: OutlinedButton(
-                                  child: const Text('Edit Order'),
-                                  onPressed: () => null,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: FractionallySizedBox(
-                                widthFactor: .9,
-                                child: ElevatedButton(
-                                  child: const Text('Cancel Order'),
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.red),
-                                  onPressed: () => null,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : FractionallySizedBox(
-                          widthFactor: .80,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                Map<String, dynamic> map =
-                                    await LocationService().getPlace('Ridge');
-                              },
-                              child: const Text("Reorder")),
-                        ),
                   // Item List
-                  const Divider(),
                   Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.fromLTRB(20, 10, 0, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 15, 0, 5),
                     child: const Text(
                       'Order Summary',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                       textAlign: TextAlign.left,
                     ),
                   ),
+                  // ? Explore Table Widget for list items
                   SizedBox(
                     //height: 300,
                     child: ListView.builder(
@@ -473,6 +382,41 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                   ),
                   const Divider(),
+                  _order.status == "complete"
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: FractionallySizedBox(
+                                widthFactor: .9,
+                                child: OutlinedButton(
+                                  child: const Text('Edit Order'),
+                                  onPressed: () => null,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: FractionallySizedBox(
+                                widthFactor: .9,
+                                child: ElevatedButton(
+                                  child: const Text('Cancel Order'),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.red),
+                                  onPressed: () => null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : FractionallySizedBox(
+                          widthFactor: .80,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                Map<String, dynamic> map =
+                                    await LocationService().getPlace('Ridge');
+                              },
+                              child: const Text("Reorder")),
+                        ),
+                  Divider(),
                   // Shipping/Billing Info
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -551,6 +495,137 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ]),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class OrderCompletedMap extends StatelessWidget {
+  const OrderCompletedMap({
+    Key? key,
+    required CameraPosition noid,
+    required Set<Marker> markers,
+    required Completer<GoogleMapController> controller,
+  })  : _noid = noid,
+        _markers = markers,
+        _controller = controller,
+        super(key: key);
+
+  final CameraPosition _noid;
+  final Set<Marker> _markers;
+  final Completer<GoogleMapController> _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+        zoomControlsEnabled: false,
+        initialCameraPosition: _noid,
+        markers: _markers,
+        onMapCreated: (GoogleMapController controller) async {
+          _controller.complete(controller);
+        });
+  }
+}
+
+class OrderShippedMap extends StatelessWidget {
+  const OrderShippedMap({
+    Key? key,
+    required CameraPosition noid,
+    required Set<Marker> markers,
+    required Set<Polygon> polygons,
+    required Set<Polyline> polylines,
+    required Completer<GoogleMapController> controller,
+  })  : _noid = noid,
+        _markers = markers,
+        _polygons = polygons,
+        _polylines = polylines,
+        _controller = controller,
+        super(key: key);
+
+  final CameraPosition _noid;
+  final Set<Marker> _markers;
+  final Set<Polygon> _polygons;
+  final Set<Polyline> _polylines;
+  final Completer<GoogleMapController> _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+        zoomControlsEnabled: false,
+        initialCameraPosition: _noid,
+        markers: _markers,
+        polygons: _polygons,
+        polylines: _polylines,
+        onMapCreated: (GoogleMapController controller) async {
+          _controller.complete(controller);
+        });
+  }
+}
+
+class OrderProcessingMap extends StatelessWidget {
+  const OrderProcessingMap({
+    Key? key,
+    required CameraPosition noid,
+    required Set<Marker> markers,
+    required Completer<GoogleMapController> controller,
+  })  : _noid = noid,
+        _markers = markers,
+        _controller = controller,
+        super(key: key);
+
+  final CameraPosition _noid;
+  final Set<Marker> _markers;
+  final Completer<GoogleMapController> _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+        zoomControlsEnabled: false,
+        initialCameraPosition: _noid,
+        markers: _markers,
+        onMapCreated: (GoogleMapController controller) async {
+          _controller.complete(controller);
+        });
+  }
+}
+
+class OrderStatusStepper extends StatelessWidget {
+  const OrderStatusStepper({
+    Key? key,
+    required int currentStep,
+  })  : _currentStep = currentStep,
+        super(key: key);
+
+  final int _currentStep;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      child: Stepper(
+        currentStep: _currentStep,
+        elevation: 0,
+        type: StepperType.horizontal,
+        steps: [
+          Step(
+            title: Text('Processing'),
+            content: Text(''),
+            isActive: _currentStep >= 0,
+          ),
+          Step(
+            title: Text('Shipped'),
+            content: Text('Your order is on the way!!'),
+            isActive: _currentStep >= 1,
+          ),
+          Step(
+            title: Text('Completed'),
+            content: Text('All done!'),
+            isActive: _currentStep >= 2,
+          ),
+        ],
+      ),
+      data: ThemeData(
+        colorScheme:
+            Theme.of(context).colorScheme.copyWith(primary: Colors.lightGreen),
       ),
     );
   }
