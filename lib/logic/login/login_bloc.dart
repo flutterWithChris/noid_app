@@ -36,7 +36,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Validators {
     _password.close();
   }
 
+  _loginCheck() async {
+    var loginResponse = await userRepo.isLoggedIn();
+    if (loginResponse == true) {
+      emit(LoginSuccess());
+    }
+  }
+
   LoginBloc() : super(LoginInitial()) {
+    _loginCheck();
+
     on<LogOut>(((event, emit) => userRepo.logOut()));
     on<LoginRetry>(((event, emit) => emit(LoginInitial())));
     on<LoginSubmit>(((event, emit) async {
@@ -48,6 +57,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Validators {
         loginResponse = await userRepo.isLoggedIn();
       }));
       loginResponse ? emit(LoginSuccess()) : emit(LoginFail());
+      dispose();
     }));
   }
 }

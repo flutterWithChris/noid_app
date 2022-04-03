@@ -15,6 +15,7 @@ class CartApi {
 // * Remove Single Item
   void removeFromCart(String itemId) async {
     await _wooController.deleteMyCartItem(key: itemId);
+  
   }
 
 // * Clear Entire Cart

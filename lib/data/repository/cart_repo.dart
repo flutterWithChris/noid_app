@@ -1,36 +1,33 @@
-import 'package:noid_app/data/providers/cart_api.dart';
 import 'package:woocommerce/models/cart.dart';
 import 'package:woocommerce/models/cart_item.dart';
 
+import 'package:noid_app/data/Model/cart_model.dart';
+import 'package:noid_app/data/providers/cart_api.dart';
+
 class CartRepo {
-  final CartApi _cartApi = CartApi();
+  final Cart cart = Cart();
+  get getCart => this.cart;
 
-  void addToCart(String itemId, String quantity) {
-    _cartApi.addToCart(itemId, quantity);
+  void addToCart(int itemId, int quantity) {
+    cart.addItemToCart(itemId, quantity);
   }
 
-  void removeFromCart(String itemId) {
-    _cartApi.removeFromCart(itemId);
+  void removeFromCart(int itemId, int quantity) {
+    cart.removeFromMyCart(itemId, quantity);
   }
 
-  void clearMyCart() {
-    _cartApi.clearEntireCart();
+  int getItemCount() {
+    print('Cart Count: ' + cart.getItemcount.toString());
+    return cart.getItemcount;
   }
 
-  Future<WooCart> getMyCart() async {
-    return await _cartApi.getCurrentCart();
+  double getTotal() {
+    return cart.getTotal;
   }
 
-  Future<WooCartItem> getCartItem(String key) async {
-    return await _cartApi.getCartItem(key);
-  }
-
-  Future<List<WooCartItem>> getAllCartItems() async {
-    var items = await _cartApi.getAllCartItems();
+// ! Clear Cart Function
+  Map<int, int> getAllCartItems() {
+    var items = cart.getItemList();
     return items;
-  }
-
-  void updateCartItem(String key, int id, int quantity) {
-    _cartApi.updateCartItem(key, id, quantity);
   }
 }

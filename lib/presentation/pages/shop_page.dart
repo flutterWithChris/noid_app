@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:noid_app/data/Model/woo_controller.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noid_app/data/repository/product_repo.dart';
+import 'package:noid_app/logic/bloc/shop/shop_bloc.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/category_select.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -16,10 +18,10 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  final WooCommerce _wooController = WooRepo().wooController;
+  ShopBloc shopBloc = ShopBloc();
 
   Future<List<WooProduct>> _getAllProducts() async {
-    var products = await _wooController.getProducts();
+    var products = await ProductRepo().getProducts();
     List<WooProduct> allProducts = [];
     for (var p in products) {
       WooProduct product = p;
@@ -65,11 +67,6 @@ class _ShopPageState extends State<ShopPage> {
                       },
                     ),
                   );
-
-                  /*   return Container(
-                      child: Text("Nope"),
-                    );*/
-
                 }
               },
             ),

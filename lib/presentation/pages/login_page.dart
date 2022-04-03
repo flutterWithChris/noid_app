@@ -5,7 +5,6 @@ import 'package:noid_app/data/repository/user_repo.dart';
 import 'package:noid_app/logic/login/login_bloc.dart';
 import 'package:noid_app/presentation/pages/home_page.dart';
 
-
 class LoginPage extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
 

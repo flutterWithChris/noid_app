@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:noid_app/data/Model/cart_model.dart';
 import 'package:noid_app/data/Model/woo_controller.dart';
 import 'package:noid_app/logic/bloc/cart/cart_bloc.dart';
+import 'package:noid_app/presentation/pages/my_cart.dart';
 import 'package:noid_app/presentation/widgets/bottom_nav_bar.dart';
 import 'package:noid_app/presentation/widgets/cart_icon.dart';
 import 'package:noid_app/presentation/widgets/main_app_bar.dart';
@@ -19,12 +22,12 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  CartBloc cartBloc = CartBloc();
   int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
     final _product = widget.product;
+    CartBloc cartBloc = BlocProvider.of<CartBloc>(context);
 
     return Scaffold(
       appBar: const MainAppBar(),
@@ -102,15 +105,18 @@ class _ProductPageState extends State<ProductPage> {
                           const SizedBox(
                             width: 25,
                           ),
-                          ElevatedButton(
-                            onPressed: () => {
-                              cartBloc.selectedQuantity(quantity),
-                              cartBloc.addItem(_product),
-                              cartBloc.add(AddToCart()),
-                            },
-                            child: const Text('Add To Cart'),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.lightGreen,
+                          BlocProvider(
+                            create: (context) => CartBloc(),
+                            child: ElevatedButton(
+                              onPressed: () => {
+                                cartBloc.selectedQuantity(quantity),
+                                cartBloc.addItem(_product.id),
+                                cartBloc.add(AddToCart()),
+                              },
+                              child: const Text('Add To Cart'),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.lightGreen,
+                              ),
                             ),
                           ),
                         ],
@@ -134,6 +140,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _incrementButton(int index) {
     return FloatingActionButton(
+      heroTag: 'increase',
       elevation: .3,
       mini: true,
       child: const Icon(
@@ -152,6 +159,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _decreaseButton(int index) {
     return FloatingActionButton(
+      heroTag: 'decrease',
       elevation: .3,
       mini: true,
       child: const Icon(

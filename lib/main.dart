@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:noid_app/data/repository/user_repo.dart';
+import 'package:noid_app/logic/bloc/cart/cart_bloc.dart';
 import 'package:noid_app/presentation/pages/login_page.dart';
 import 'package:noid_app/presentation/pages/home_page.dart';
 import 'package:noid_app/presentation/screens/my_account.dart';
@@ -28,14 +29,17 @@ class _NoidAppState extends State<NoidApp> {
   Widget build(BuildContext context) {
     return RepositoryProvider(
       create: (context) => UserRepo(),
-      child: GetMaterialApp(
-        getPages: [
-          GetPage(name: "/", page: () => LoginPage()),
-          GetPage(name: "/home'", page: () => const HomePage()),
-          GetPage(name: "/shop", page: () => const ShopPage()),
-          GetPage(name: "/my-account", page: () => MyAccount()),
-        ],
-        initialRoute: '/',
+      child: BlocProvider(
+        create: (context) => CartBloc(),
+        child: GetMaterialApp(
+          getPages: [
+            GetPage(name: "/", page: () => LoginPage()),
+            GetPage(name: "/home'", page: () => const HomePage()),
+            GetPage(name: "/shop", page: () => const ShopPage()),
+            GetPage(name: "/my-account", page: () => MyAccount()),
+          ],
+          initialRoute: '/',
+        ),
       ),
     );
   }
